@@ -1,0 +1,1241 @@
+{
+  "global": {
+    "base_rate": 0.3667,
+    "max_gain": 0.4099,
+    "decay": 0.9149,
+    "max_rate": 0.7766,
+    "r_squared": 0.3402,
+    "sample_size": 1766850
+  },
+  "commute": {
+    "base_rate": 0.3662,
+    "max_gain": 0.4359,
+    "decay": 0.8408,
+    "max_rate": 0.8021,
+    "r_squared": 0.3967,
+    "sample_size": 543834
+  },
+  "leisure": {
+    "base_rate": 0.3669,
+    "max_gain": 0.3985,
+    "decay": 0.9534,
+    "max_rate": 0.7654,
+    "r_squared": 0.2777,
+    "sample_size": 1223119
+  },
+  "regions": {
+    "Region_01": {
+      "global": {
+        "base_rate": 0.289,
+        "max_gain": 0.3133,
+        "decay": 1.8645,
+        "max_rate": 0.6023,
+        "r_squared": 0.8536,
+        "sample_size": 6740
+      }
+    },
+    "Region_02": {
+      "global": {
+        "base_rate": 0.3659,
+        "max_gain": 0.4104,
+        "decay": 1.0925,
+        "max_rate": 0.7763,
+        "r_squared": 0.9133,
+        "sample_size": 13091
+      }
+    },
+    "Region_03": {
+      "global": {
+        "base_rate": 0.382,
+        "max_gain": 0.3884,
+        "decay": 0.8762,
+        "max_rate": 0.7703,
+        "r_squared": 0.5819,
+        "sample_size": 54934
+      }
+    },
+    "Region_04": {
+      "global": {
+        "base_rate": 0.4175,
+        "max_gain": 0.3506,
+        "decay": 1.054,
+        "max_rate": 0.768,
+        "r_squared": 0.8236,
+        "sample_size": 4581
+      }
+    },
+    "Region_05": {
+      "global": {
+        "base_rate": 0.287,
+        "max_gain": 0.4448,
+        "decay": 1.1378,
+        "max_rate": 0.7318,
+        "r_squared": 0.9726,
+        "sample_size": 6222
+      }
+    },
+    "Region_06": {
+      "global": {
+        "base_rate": 0.3074,
+        "max_gain": 0.3938,
+        "decay": 2.0284,
+        "max_rate": 0.7013,
+        "r_squared": 0.7843,
+        "sample_size": 8897
+      }
+    },
+    "Region_07": {
+      "global": {
+        "base_rate": 0.2922,
+        "max_gain": 0.4556,
+        "decay": 1.1324,
+        "max_rate": 0.7478,
+        "r_squared": 0.9214,
+        "sample_size": 14921
+      }
+    },
+    "Region_08": {
+      "global": {
+        "base_rate": 0.4128,
+        "max_gain": 0.3908,
+        "decay": 0.7586,
+        "max_rate": 0.8036,
+        "r_squared": 0.9531,
+        "sample_size": 3223
+      }
+    },
+    "Region_09": {
+      "global": {
+        "base_rate": 0.4534,
+        "max_gain": 0.3385,
+        "decay": 1.0407,
+        "max_rate": 0.7919,
+        "r_squared": 0.7973,
+        "sample_size": 14573
+      }
+    },
+    "Region_10": {
+      "global": {
+        "base_rate": 0.488,
+        "max_gain": 0.3114,
+        "decay": 1.3936,
+        "max_rate": 0.7995,
+        "r_squared": 0.7182,
+        "sample_size": 21425
+      }
+    },
+    "Region_11": {
+      "global": {
+        "base_rate": 0.5409,
+        "max_gain": 0.3092,
+        "decay": 0.3436,
+        "max_rate": 0.8501,
+        "r_squared": 0.6251,
+        "sample_size": 16183
+      }
+    },
+    "Region_12": {
+      "global": {
+        "base_rate": 0.231,
+        "max_gain": 0.434,
+        "decay": 2.3859,
+        "max_rate": 0.6651,
+        "r_squared": 0.9377,
+        "sample_size": 930
+      }
+    },
+    "Region_13": {
+      "global": {
+        "base_rate": 0.3977,
+        "max_gain": 0.3872,
+        "decay": 0.7004,
+        "max_rate": 0.7849,
+        "r_squared": 0.7219,
+        "sample_size": 11685
+      }
+    },
+    "Region_14": {
+      "global": {
+        "base_rate": 0.2684,
+        "max_gain": 0.3447,
+        "decay": 1.4318,
+        "max_rate": 0.6131,
+        "r_squared": 0.7958,
+        "sample_size": 2889
+      }
+    },
+    "Region_15": {
+      "global": {
+        "base_rate": 0.3912,
+        "max_gain": 0.3978,
+        "decay": 0.8471,
+        "max_rate": 0.789,
+        "r_squared": 0.5281,
+        "sample_size": 5549
+      }
+    },
+    "Region_16": {
+      "global": {
+        "base_rate": 0.415,
+        "max_gain": 0.4111,
+        "decay": 0.8749,
+        "max_rate": 0.8262,
+        "r_squared": 0.8829,
+        "sample_size": 1795
+      }
+    },
+    "Region_17": {
+      "global": {
+        "base_rate": 0.2093,
+        "max_gain": 0.4569,
+        "decay": 1.747,
+        "max_rate": 0.6662,
+        "r_squared": 0.9035,
+        "sample_size": 5170
+      }
+    },
+    "Region_18": {
+      "global": {
+        "base_rate": 0.415,
+        "max_gain": 0.3517,
+        "decay": 1.1574,
+        "max_rate": 0.7667,
+        "r_squared": 0.8223,
+        "sample_size": 13494
+      }
+    },
+    "Region_19": {
+      "global": {
+        "base_rate": 0.3892,
+        "max_gain": 0.3838,
+        "decay": 1.055,
+        "max_rate": 0.773,
+        "r_squared": 0.7265,
+        "sample_size": 16189
+      }
+    },
+    "Region_20": {
+      "global": {
+        "base_rate": 0.3038,
+        "max_gain": 0.3731,
+        "decay": 2.0807,
+        "max_rate": 0.677,
+        "r_squared": 0.6994,
+        "sample_size": 7137
+      }
+    },
+    "Region_21": {
+      "global": {
+        "base_rate": 0.3726,
+        "max_gain": 0.3496,
+        "decay": 2.6791,
+        "max_rate": 0.7222,
+        "r_squared": 0.798,
+        "sample_size": 5100
+      }
+    },
+    "Region_22": {
+      "global": {
+        "base_rate": 0.3233,
+        "max_gain": 0.4057,
+        "decay": 1.2749,
+        "max_rate": 0.729,
+        "r_squared": 0.846,
+        "sample_size": 8105
+      }
+    },
+    "Region_23": {
+      "global": {
+        "base_rate": 0.3867,
+        "max_gain": 0.378,
+        "decay": 0.9519,
+        "max_rate": 0.7646,
+        "r_squared": 0.886,
+        "sample_size": 24897
+      }
+    },
+    "Region_24": {
+      "global": {
+        "base_rate": 0.3638,
+        "max_gain": 0.387,
+        "decay": 1.0099,
+        "max_rate": 0.7507,
+        "r_squared": 0.7533,
+        "sample_size": 21305
+      }
+    },
+    "Region_25": {
+      "global": {
+        "base_rate": 0.3739,
+        "max_gain": 0.4057,
+        "decay": 1.0921,
+        "max_rate": 0.7796,
+        "r_squared": 0.8701,
+        "sample_size": 8761
+      }
+    },
+    "Region_26": {
+      "global": {
+        "base_rate": 0.3112,
+        "max_gain": 0.4249,
+        "decay": 1.8207,
+        "max_rate": 0.7361,
+        "r_squared": 0.9051,
+        "sample_size": 8318
+      }
+    },
+    "Region_27": {
+      "global": {
+        "base_rate": 0.3402,
+        "max_gain": 0.4183,
+        "decay": 1.4874,
+        "max_rate": 0.7585,
+        "r_squared": 0.967,
+        "sample_size": 17975
+      }
+    },
+    "Region_28": {
+      "global": {
+        "base_rate": 0.4417,
+        "max_gain": 0.3198,
+        "decay": 0.6804,
+        "max_rate": 0.7615,
+        "r_squared": 0.6555,
+        "sample_size": 25355
+      }
+    },
+    "Region_29": {
+      "global": {
+        "base_rate": 0.3544,
+        "max_gain": 0.3881,
+        "decay": 1.3055,
+        "max_rate": 0.7425,
+        "r_squared": 0.9676,
+        "sample_size": 13021
+      }
+    },
+    "Region_30": {
+      "global": {
+        "base_rate": 0.4966,
+        "max_gain": 0.2953,
+        "decay": 0.7515,
+        "max_rate": 0.7919,
+        "r_squared": 0.5334,
+        "sample_size": 21930
+      }
+    },
+    "Region_31": {
+      "global": {
+        "base_rate": 0.3436,
+        "max_gain": 0.3752,
+        "decay": 1.8402,
+        "max_rate": 0.7188,
+        "r_squared": 0.9338,
+        "sample_size": 10118
+      }
+    },
+    "Region_32": {
+      "global": {
+        "base_rate": 0.5373,
+        "max_gain": 0.3413,
+        "decay": 0.5073,
+        "max_rate": 0.8786,
+        "r_squared": 0.7886,
+        "sample_size": 6289
+      }
+    },
+    "Region_33": {
+      "global": {
+        "base_rate": 0.4181,
+        "max_gain": 0.4439,
+        "decay": 0.8562,
+        "max_rate": 0.862,
+        "r_squared": 0.828,
+        "sample_size": 8347
+      }
+    },
+    "Region_34": {
+      "global": {
+        "base_rate": 0.2819,
+        "max_gain": 0.4158,
+        "decay": 1.4625,
+        "max_rate": 0.6977,
+        "r_squared": 0.8097,
+        "sample_size": 12499
+      }
+    },
+    "Region_35": {
+      "global": {
+        "base_rate": 0.1033,
+        "max_gain": 0.5203,
+        "decay": 1.7778,
+        "max_rate": 0.6236,
+        "r_squared": 0.9726,
+        "sample_size": 4862
+      }
+    },
+    "Region_36": {
+      "global": {
+        "base_rate": 0.427,
+        "max_gain": 0.3586,
+        "decay": 0.9353,
+        "max_rate": 0.7856,
+        "r_squared": 0.713,
+        "sample_size": 7364
+      }
+    },
+    "Region_37": {
+      "global": {
+        "base_rate": 0.4594,
+        "max_gain": 0.3641,
+        "decay": 0.9067,
+        "max_rate": 0.8235,
+        "r_squared": 0.7503,
+        "sample_size": 6381
+      }
+    },
+    "Region_38": {
+      "global": {
+        "base_rate": 0.4192,
+        "max_gain": 0.3193,
+        "decay": 0.8425,
+        "max_rate": 0.7385,
+        "r_squared": 0.7883,
+        "sample_size": 23100
+      }
+    },
+    "Region_39": {
+      "global": {
+        "base_rate": 0.3385,
+        "max_gain": 0.3827,
+        "decay": 1.066,
+        "max_rate": 0.7211,
+        "r_squared": 0.8284,
+        "sample_size": 22155
+      }
+    },
+    "Region_40": {
+      "global": {
+        "base_rate": 0.3837,
+        "max_gain": 0.3772,
+        "decay": 0.6965,
+        "max_rate": 0.7609,
+        "r_squared": 0.4624,
+        "sample_size": 97977
+      }
+    },
+    "Region_41": {
+      "global": {
+        "base_rate": 0.3513,
+        "max_gain": 0.361,
+        "decay": 1.1837,
+        "max_rate": 0.7123,
+        "r_squared": 0.7718,
+        "sample_size": 23663
+      }
+    },
+    "Region_42": {
+      "global": {
+        "base_rate": 0.4201,
+        "max_gain": 0.4286,
+        "decay": 0.5961,
+        "max_rate": 0.8488,
+        "r_squared": 0.9624,
+        "sample_size": 1130
+      }
+    },
+    "Region_43": {
+      "global": {
+        "base_rate": 0.3772,
+        "max_gain": 0.4735,
+        "decay": 0.5431,
+        "max_rate": 0.8507,
+        "r_squared": 0.9485,
+        "sample_size": 2741
+      }
+    },
+    "Region_44": {
+      "global": {
+        "base_rate": 0.4741,
+        "max_gain": 0.3508,
+        "decay": 0.643,
+        "max_rate": 0.8249,
+        "r_squared": 0.8102,
+        "sample_size": 3533
+      }
+    },
+    "Region_45": {
+      "global": {
+        "base_rate": 0.3253,
+        "max_gain": 0.3887,
+        "decay": 1.4424,
+        "max_rate": 0.714,
+        "r_squared": 0.8098,
+        "sample_size": 11973
+      }
+    },
+    "Region_46": {
+      "global": {
+        "base_rate": 0.3851,
+        "max_gain": 0.3669,
+        "decay": 0.8121,
+        "max_rate": 0.7521,
+        "r_squared": 0.8545,
+        "sample_size": 30469
+      }
+    },
+    "Region_47": {
+      "global": {
+        "base_rate": 0.3238,
+        "max_gain": 0.3959,
+        "decay": 0.9321,
+        "max_rate": 0.7197,
+        "r_squared": 0.8121,
+        "sample_size": 8624
+      }
+    },
+    "Region_48": {
+      "global": {
+        "base_rate": 0.4071,
+        "max_gain": 0.3427,
+        "decay": 0.8826,
+        "max_rate": 0.7498,
+        "r_squared": 0.5798,
+        "sample_size": 20788
+      }
+    },
+    "Region_49": {
+      "global": {
+        "base_rate": 0.3041,
+        "max_gain": 0.3832,
+        "decay": 1.3085,
+        "max_rate": 0.6873,
+        "r_squared": 0.7775,
+        "sample_size": 6480
+      }
+    },
+    "Region_50": {
+      "global": {
+        "base_rate": 0.3869,
+        "max_gain": 0.3484,
+        "decay": 0.8862,
+        "max_rate": 0.7353,
+        "r_squared": 0.8243,
+        "sample_size": 17900
+      }
+    },
+    "Region_51": {
+      "global": {
+        "base_rate": 0.3184,
+        "max_gain": 0.3876,
+        "decay": 2.0349,
+        "max_rate": 0.706,
+        "r_squared": 0.6045,
+        "sample_size": 7983
+      }
+    },
+    "Region_52": {
+      "global": {
+        "base_rate": 0.3889,
+        "max_gain": 0.3554,
+        "decay": 0.876,
+        "max_rate": 0.7442,
+        "r_squared": 0.7954,
+        "sample_size": 57927
+      }
+    },
+    "Region_53": {
+      "global": {
+        "base_rate": 0.39,
+        "max_gain": 0.4432,
+        "decay": 0.7144,
+        "max_rate": 0.8333,
+        "r_squared": 0.9716,
+        "sample_size": 651
+      }
+    },
+    "Region_54": {
+      "global": {
+        "base_rate": 0.3333,
+        "max_gain": 0.5177,
+        "decay": 1.2634,
+        "max_rate": 0.851,
+        "r_squared": 0.9451,
+        "sample_size": 1244
+      }
+    },
+    "Region_55": {
+      "global": {
+        "base_rate": 0.3574,
+        "max_gain": 0.3391,
+        "decay": 1.2871,
+        "max_rate": 0.6965,
+        "r_squared": 0.5734,
+        "sample_size": 14566
+      }
+    },
+    "Region_56": {
+      "global": {
+        "base_rate": 0.4042,
+        "max_gain": 0.3628,
+        "decay": 0.7511,
+        "max_rate": 0.767,
+        "r_squared": 0.6116,
+        "sample_size": 17842
+      }
+    },
+    "Region_57": {
+      "global": {
+        "base_rate": 0.3452,
+        "max_gain": 0.4138,
+        "decay": 1.0924,
+        "max_rate": 0.759,
+        "r_squared": 0.7185,
+        "sample_size": 20071
+      }
+    },
+    "Region_58": {
+      "global": {
+        "base_rate": 0.3313,
+        "max_gain": 0.3072,
+        "decay": 2.1939,
+        "max_rate": 0.6386,
+        "r_squared": 0.9411,
+        "sample_size": 435
+      }
+    },
+    "Region_59": {
+      "global": {
+        "base_rate": 0.4558,
+        "max_gain": 0.3384,
+        "decay": 0.8249,
+        "max_rate": 0.7942,
+        "r_squared": 0.7148,
+        "sample_size": 66134
+      }
+    },
+    "Region_60": {
+      "global": {
+        "base_rate": 0.4816,
+        "max_gain": 0.3182,
+        "decay": 0.8332,
+        "max_rate": 0.7998,
+        "r_squared": 0.7822,
+        "sample_size": 1435
+      }
+    },
+    "Region_61": {
+      "global": {
+        "base_rate": 0.3103,
+        "max_gain": 0.3284,
+        "decay": 2.358,
+        "max_rate": 0.6387,
+        "r_squared": 0.8598,
+        "sample_size": 4102
+      }
+    },
+    "Region_62": {
+      "global": {
+        "base_rate": 0.3162,
+        "max_gain": 0.3695,
+        "decay": 0.8089,
+        "max_rate": 0.6858,
+        "r_squared": 0.9247,
+        "sample_size": 6081
+      }
+    },
+    "Region_63": {
+      "global": {
+        "base_rate": 0.4042,
+        "max_gain": 0.4096,
+        "decay": 0.6212,
+        "max_rate": 0.8138,
+        "r_squared": 0.7847,
+        "sample_size": 6582
+      }
+    },
+    "Region_64": {
+      "global": {
+        "base_rate": 0.347,
+        "max_gain": 0.3611,
+        "decay": 1.3238,
+        "max_rate": 0.7082,
+        "r_squared": 0.7658,
+        "sample_size": 17814
+      }
+    },
+    "Region_65": {
+      "global": {
+        "base_rate": 0.3411,
+        "max_gain": 0.3348,
+        "decay": 0.8232,
+        "max_rate": 0.6759,
+        "r_squared": 0.9382,
+        "sample_size": 5305
+      }
+    },
+    "Region_66": {
+      "global": {
+        "base_rate": 0.4173,
+        "max_gain": 0.4046,
+        "decay": 0.8159,
+        "max_rate": 0.8219,
+        "r_squared": 0.8475,
+        "sample_size": 14071
+      }
+    },
+    "Region_67": {
+      "global": {
+        "base_rate": 0.3209,
+        "max_gain": 0.3685,
+        "decay": 0.9198,
+        "max_rate": 0.6894,
+        "r_squared": 0.9263,
+        "sample_size": 6515
+      }
+    },
+    "Region_68": {
+      "global": {
+        "base_rate": 0.2983,
+        "max_gain": 0.3595,
+        "decay": 0.8178,
+        "max_rate": 0.6578,
+        "r_squared": 0.8761,
+        "sample_size": 10617
+      }
+    },
+    "Region_69": {
+      "global": {
+        "base_rate": 0.3719,
+        "max_gain": 0.3256,
+        "decay": 0.9053,
+        "max_rate": 0.6976,
+        "r_squared": 0.9592,
+        "sample_size": 13267
+      }
+    },
+    "Region_70": {
+      "global": {
+        "base_rate": 0.3058,
+        "max_gain": 0.4662,
+        "decay": 1.606,
+        "max_rate": 0.772,
+        "r_squared": 0.9972,
+        "sample_size": 452
+      }
+    },
+    "Region_71": {
+      "global": {
+        "base_rate": 0.3647,
+        "max_gain": 0.449,
+        "decay": 0.5195,
+        "max_rate": 0.8136,
+        "r_squared": 0.5896,
+        "sample_size": 16210
+      }
+    },
+    "Region_72": {
+      "global": {
+        "base_rate": 0.4353,
+        "max_gain": 0.314,
+        "decay": 0.8744,
+        "max_rate": 0.7493,
+        "r_squared": 0.566,
+        "sample_size": 24154
+      }
+    },
+    "Region_73": {
+      "global": {
+        "base_rate": 0.2787,
+        "max_gain": 0.4544,
+        "decay": 1.1079,
+        "max_rate": 0.7332,
+        "r_squared": 0.6029,
+        "sample_size": 7973
+      }
+    },
+    "Region_74": {
+      "global": {
+        "base_rate": 0.454,
+        "max_gain": 0.4003,
+        "decay": 0.7036,
+        "max_rate": 0.8543,
+        "r_squared": 0.8617,
+        "sample_size": 40932
+      }
+    },
+    "Region_75": {
+      "global": {
+        "base_rate": 0.2908,
+        "max_gain": 0.4232,
+        "decay": 0.7237,
+        "max_rate": 0.714,
+        "r_squared": 0.8516,
+        "sample_size": 6204
+      }
+    },
+    "Region_76": {
+      "global": {
+        "base_rate": 0.4436,
+        "max_gain": 0.3709,
+        "decay": 2.316,
+        "max_rate": 0.8145,
+        "r_squared": 0.715,
+        "sample_size": 1137
+      }
+    },
+    "Region_77": {
+      "global": {
+        "base_rate": 0.3865,
+        "max_gain": 0.396,
+        "decay": 0.7242,
+        "max_rate": 0.7825,
+        "r_squared": 0.777,
+        "sample_size": 21869
+      }
+    },
+    "Region_78": {
+      "global": {
+        "base_rate": 0.1354,
+        "max_gain": 0.6987,
+        "decay": 1.1955,
+        "max_rate": 0.8341,
+        "r_squared": 0.9368,
+        "sample_size": 2572
+      }
+    },
+    "Region_79": {
+      "global": {
+        "base_rate": 0.4611,
+        "max_gain": 0.4069,
+        "decay": 0.5465,
+        "max_rate": 0.868,
+        "r_squared": 0.942,
+        "sample_size": 1675
+      }
+    },
+    "Region_80": {
+      "global": {
+        "base_rate": 0.4339,
+        "max_gain": 0.3812,
+        "decay": 0.777,
+        "max_rate": 0.8151,
+        "r_squared": 0.716,
+        "sample_size": 782
+      }
+    },
+    "Region_81": {
+      "global": {
+        "base_rate": 0.3705,
+        "max_gain": 0.4074,
+        "decay": 0.8261,
+        "max_rate": 0.7779,
+        "r_squared": 0.5811,
+        "sample_size": 50798
+      }
+    },
+    "Region_82": {
+      "global": {
+        "base_rate": 0.4604,
+        "max_gain": 0.3562,
+        "decay": 0.6265,
+        "max_rate": 0.8166,
+        "r_squared": 0.7464,
+        "sample_size": 42579
+      }
+    },
+    "Region_83": {
+      "global": {
+        "base_rate": 0.3773,
+        "max_gain": 0.4134,
+        "decay": 0.7381,
+        "max_rate": 0.7907,
+        "r_squared": 0.8526,
+        "sample_size": 6926
+      }
+    },
+    "Region_84": {
+      "global": {
+        "base_rate": 0.3454,
+        "max_gain": 0.3902,
+        "decay": 1.5235,
+        "max_rate": 0.7356,
+        "r_squared": 0.5596,
+        "sample_size": 14149
+      }
+    },
+    "Region_85": {
+      "global": {
+        "base_rate": 0.097,
+        "max_gain": 0.5369,
+        "decay": 1.8896,
+        "max_rate": 0.6339,
+        "r_squared": 0.9095,
+        "sample_size": 1876
+      }
+    },
+    "Region_86": {
+      "global": {
+        "base_rate": 0.3907,
+        "max_gain": 0.3805,
+        "decay": 0.972,
+        "max_rate": 0.7711,
+        "r_squared": 0.7874,
+        "sample_size": 21308
+      }
+    },
+    "Region_87": {
+      "global": {
+        "base_rate": 0.4478,
+        "max_gain": 0.3649,
+        "decay": 0.8372,
+        "max_rate": 0.8127,
+        "r_squared": 0.776,
+        "sample_size": 18733
+      }
+    },
+    "Region_88": {
+      "global": {
+        "base_rate": 0.4388,
+        "max_gain": 0.3754,
+        "decay": 0.5587,
+        "max_rate": 0.8142,
+        "r_squared": 0.7279,
+        "sample_size": 21483
+      }
+    },
+    "Region_89": {
+      "global": {
+        "base_rate": 0.3985,
+        "max_gain": 0.4339,
+        "decay": 1.0126,
+        "max_rate": 0.8325,
+        "r_squared": 0.8811,
+        "sample_size": 1409
+      }
+    },
+    "Region_90": {
+      "global": {
+        "base_rate": 0.2773,
+        "max_gain": 0.4122,
+        "decay": 1.5453,
+        "max_rate": 0.6895,
+        "r_squared": 0.8206,
+        "sample_size": 14054
+      }
+    },
+    "Region_91": {
+      "global": {
+        "base_rate": 0.4754,
+        "max_gain": 0.365,
+        "decay": 0.8642,
+        "max_rate": 0.8404,
+        "r_squared": 0.8971,
+        "sample_size": 11641
+      }
+    },
+    "Region_92": {
+      "global": {
+        "base_rate": 0.5282,
+        "max_gain": 0.2752,
+        "decay": 2.2856,
+        "max_rate": 0.8034,
+        "r_squared": 0.8095,
+        "sample_size": 1554
+      }
+    },
+    "Region_93": {
+      "global": {
+        "base_rate": 0.2744,
+        "max_gain": 0.4382,
+        "decay": 1.3699,
+        "max_rate": 0.7126,
+        "r_squared": 0.9063,
+        "sample_size": 6856
+      }
+    },
+    "Region_94": {
+      "global": {
+        "base_rate": 0.3385,
+        "max_gain": 0.4417,
+        "decay": 1.1017,
+        "max_rate": 0.7802,
+        "r_squared": 0.8869,
+        "sample_size": 5197
+      }
+    },
+    "Region_95": {
+      "global": {
+        "base_rate": 0.4377,
+        "max_gain": 0.3317,
+        "decay": 1.1101,
+        "max_rate": 0.7694,
+        "r_squared": 0.8894,
+        "sample_size": 2130
+      }
+    },
+    "Region_96": {
+      "global": {
+        "base_rate": 0.3312,
+        "max_gain": 0.4028,
+        "decay": 1.2674,
+        "max_rate": 0.734,
+        "r_squared": 0.8595,
+        "sample_size": 13423
+      }
+    },
+    "Region_97": {
+      "global": {
+        "base_rate": 0.3775,
+        "max_gain": 0.4133,
+        "decay": 0.8637,
+        "max_rate": 0.7908,
+        "r_squared": 0.7306,
+        "sample_size": 7770
+      }
+    },
+    "Region_98": {
+      "global": {
+        "base_rate": 0.38,
+        "max_gain": 0.3769,
+        "decay": 1.0362,
+        "max_rate": 0.757,
+        "r_squared": 0.6776,
+        "sample_size": 12329
+      }
+    },
+    "Region_99": {
+      "global": {
+        "base_rate": 0.1967,
+        "max_gain": 0.5629,
+        "decay": 1.1356,
+        "max_rate": 0.7596,
+        "r_squared": 0.9783,
+        "sample_size": 26989
+      }
+    },
+    "Region_100": {
+      "global": {
+        "base_rate": 0.2809,
+        "max_gain": 0.3777,
+        "decay": 1.2859,
+        "max_rate": 0.6586,
+        "r_squared": 0.8787,
+        "sample_size": 12942
+      }
+    },
+    "Region_101": {
+      "global": {
+        "base_rate": 0.2532,
+        "max_gain": 0.4429,
+        "decay": 1.2824,
+        "max_rate": 0.6961,
+        "r_squared": 0.9179,
+        "sample_size": 18504
+      }
+    },
+    "Region_102": {
+      "global": {
+        "base_rate": 0.4088,
+        "max_gain": 0.3534,
+        "decay": 0.9358,
+        "max_rate": 0.7623,
+        "r_squared": 0.8507,
+        "sample_size": 30056
+      }
+    },
+    "Region_103": {
+      "global": {
+        "base_rate": 0.3419,
+        "max_gain": 0.3903,
+        "decay": 1.1708,
+        "max_rate": 0.7322,
+        "r_squared": 0.6766,
+        "sample_size": 21918
+      }
+    },
+    "Region_104": {
+      "global": {
+        "base_rate": 0.3841,
+        "max_gain": 0.3759,
+        "decay": 1.0861,
+        "max_rate": 0.76,
+        "r_squared": 0.7931,
+        "sample_size": 17523
+      }
+    },
+    "Region_105": {
+      "global": {
+        "base_rate": 0.1907,
+        "max_gain": 0.4314,
+        "decay": 2.0424,
+        "max_rate": 0.6221,
+        "r_squared": 0.8885,
+        "sample_size": 2657
+      }
+    },
+    "Region_106": {
+      "global": {
+        "base_rate": 0.3915,
+        "max_gain": 0.3817,
+        "decay": 1.6852,
+        "max_rate": 0.7732,
+        "r_squared": 0.865,
+        "sample_size": 857
+      }
+    },
+    "Region_107": {
+      "global": {
+        "base_rate": 0.4405,
+        "max_gain": 0.3537,
+        "decay": 1.1186,
+        "max_rate": 0.7941,
+        "r_squared": 0.8105,
+        "sample_size": 7255
+      }
+    },
+    "Region_108": {
+      "global": {
+        "base_rate": 0.4243,
+        "max_gain": 0.3822,
+        "decay": 0.9164,
+        "max_rate": 0.8065,
+        "r_squared": 0.8825,
+        "sample_size": 48977
+      }
+    },
+    "Region_109": {
+      "global": {
+        "base_rate": 0.2929,
+        "max_gain": 0.4675,
+        "decay": 1.5175,
+        "max_rate": 0.7604,
+        "r_squared": 0.9047,
+        "sample_size": 7156
+      }
+    },
+    "Region_110": {
+      "global": {
+        "base_rate": 0.3696,
+        "max_gain": 0.3627,
+        "decay": 1.5848,
+        "max_rate": 0.7323,
+        "r_squared": 0.8887,
+        "sample_size": 10587
+      }
+    },
+    "Region_111": {
+      "global": {
+        "base_rate": 0.4328,
+        "max_gain": 0.3592,
+        "decay": 1.5822,
+        "max_rate": 0.792,
+        "r_squared": 0.9589,
+        "sample_size": 9890
+      }
+    },
+    "Region_112": {
+      "global": {
+        "base_rate": 0.3095,
+        "max_gain": 0.5076,
+        "decay": 1.0249,
+        "max_rate": 0.8172,
+        "r_squared": 0.995,
+        "sample_size": 2516
+      }
+    },
+    "Region_113": {
+      "global": {
+        "base_rate": 0.4037,
+        "max_gain": 0.3568,
+        "decay": 1.0849,
+        "max_rate": 0.7605,
+        "r_squared": 0.8618,
+        "sample_size": 16171
+      }
+    },
+    "Region_114": {
+      "global": {
+        "base_rate": 0.1944,
+        "max_gain": 0.6637,
+        "decay": 1.2078,
+        "max_rate": 0.858,
+        "r_squared": 0.9747,
+        "sample_size": 1885
+      }
+    },
+    "Region_115": {
+      "global": {
+        "base_rate": 0.3317,
+        "max_gain": 0.4,
+        "decay": 1.1576,
+        "max_rate": 0.7317,
+        "r_squared": 0.9525,
+        "sample_size": 4419
+      }
+    },
+    "Region_116": {
+      "global": {
+        "base_rate": 0.3608,
+        "max_gain": 0.3258,
+        "decay": 1.5624,
+        "max_rate": 0.6867,
+        "r_squared": 0.5689,
+        "sample_size": 7037
+      }
+    },
+    "Region_117": {
+      "global": {
+        "base_rate": 0.3287,
+        "max_gain": 0.3317,
+        "decay": 1.3763,
+        "max_rate": 0.6605,
+        "r_squared": 0.9002,
+        "sample_size": 2427
+      }
+    },
+    "Region_118": {
+      "global": {
+        "base_rate": 0.3954,
+        "max_gain": 0.3594,
+        "decay": 0.9911,
+        "max_rate": 0.7548,
+        "r_squared": 0.5197,
+        "sample_size": 23138
+      }
+    },
+    "Region_119": {
+      "global": {
+        "base_rate": 0.4357,
+        "max_gain": 0.3937,
+        "decay": 0.7994,
+        "max_rate": 0.8294,
+        "r_squared": 0.6307,
+        "sample_size": 83362
+      }
+    },
+    "Region_120": {
+      "global": {
+        "base_rate": 0.3652,
+        "max_gain": 0.3631,
+        "decay": 1.1262,
+        "max_rate": 0.7283,
+        "r_squared": 0.8116,
+        "sample_size": 15792
+      }
+    },
+    "Region_121": {
+      "global": {
+        "base_rate": 0.3936,
+        "max_gain": 0.3513,
+        "decay": 0.9445,
+        "max_rate": 0.7449,
+        "r_squared": 0.9441,
+        "sample_size": 5728
+      }
+    }
+  },
+  "fitted_at": "2026-02-25 15:54",
+  "lookback_days": 90,
+  "n_regions": 121
+}

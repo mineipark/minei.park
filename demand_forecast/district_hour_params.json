@@ -1,0 +1,106 @@
+{
+  "district_ratios": {
+    "Region_01": {
+      "Region_01_District_01": 0.1939,
+      "Region_01_District_02": 0.3906
+    },
+    "Region_02": {
+      "Region_02_District_01": 0.5157
+    },
+    "Region_03": {
+      "Region_03_District_01": 0.335
+    },
+    "Region_04": {
+      "Region_04_District_01": 0.1795
+    },
+    "Region_05": {
+      "Region_05_District_01": 0.2759
+    },
+    "Region_06": {
+      "Region_06_District_01": 0.1195
+    },
+    "Region_07": {
+      "Region_07_District_01": 0.0957
+    },
+    "Region_08": {
+      "Region_08_District_01": 0.0842
+    },
+    "Region_09": {
+      "Region_09_District_01": 0.3986,
+      "Region_09_District_02": 0.4191
+    },
+    "Region_10": {
+      "Region_10_District_01": 0.9526,
+      "Region_10_District_02": 0.0474
+    },
+    "Region_11": {
+      "Region_11_District_01": 0.4243
+    },
+    "Region_12": {
+      "Region_12_District_01": 0.0665,
+      "Region_12_District_02": 0.1619
+    },
+    "Region_13": {
+      "Region_13_District_01": 0.1076
+    },
+    "Region_14": {
+      "Region_14_District_01": 0.2168,
+      "Region_14_District_02": 0.1138
+    },
+    "Region_15": {
+      "Region_15_District_01": 0.4495
+    },
+    "Region_16": {
+      "Region_16_District_01": 0.3125
+    },
+    "Region_17": {
+      "Region_17_District_01": 0.0782,
+      "Region_17_District_02": 0.2503
+    },
+    "Region_18": {
+      "Region_18_District_01": 0.2097
+    },
+    "Region_19": {
+      "Region_19_District_01": 0.2146,
+      "Region_19_District_02": 0.3293,
+      "Region_19_District_03": 0.1098
+    },
+    "Region_20": {
+      "Region_20_District_01": 0.15
+    },
+    "Region_21": {
+      "Region_21_District_01": 0.1534,
+      "Region_21_District_02": 0.1629
+    },
+    "Region_22": {
+      "Region_22_District_01": 0.3117,
+      "Region_22_District_02": 0.6302
+    },
+    "Region_23": {
+      "Region_23_District_01": 0.4553,
+      "Region_23_District_02": 0.4665,
+      "Region_23_District_03": 0.0782
+    },
+    "Region_24": {
+      "Region_24_District_01": 0.3903
+    }
+  },
+  "hourly_profiles": {
+    "Region_01": {
+      "Region_01_District_01": 0.049,
+      "Region_01_District_02": 0.029,
+      "Region_01_District_03": 0.0212,
+      "Region_01_District_04": 0.0152,
+      "Region_01_District_05": 0.0667,
+      "Region_01_District_06": 0.0457,
+      "Region_01_District_07": 0.0372,
+      "Region_01_District_08": 0.0385,
+      "Region_01_District_09": 0.0597,
+      "Region_01_District_10": 0.0696,
+      "Region_01_District_11": 0.0596
+    }
+  },
+  "condition_coefficients": {},
+  "ml_model_active": false,
+  "last_updated": "2026-02-24 14:01"
+}

@@ -1,0 +1,57 @@
+# Credentials - NEVER commit these
+credentials/
+*.json.key
+*-service-account.json
+service-account.json
+key.json
+
+# Environment variables
+.env
+.env.local
+.env.production
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+*.pkl
+*.pickle
+
+# Data files (use seed script to generate sample data)
+*.csv
+*.xlsx
+*.xls
+
+# Model artifacts
+demand_forecast/models/*.pkl
+
+# Generated visualizations
+demand_forecast/visualizations/
+*.html
+!**/public/index.html
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.bak
+*.backup_*
+
+# MCP config (contains local paths)
+.mcp.json
+
+# Claude config
+.claude/
+CLAUDE.md
