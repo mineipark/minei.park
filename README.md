@@ -1,252 +1,247 @@
-# Bike-Share Operations Platform
+# 공유 모빌리티 운영 플랫폼
 
-An end-to-end operations intelligence platform for a bike-sharing service, covering **demand forecasting**, **supply-demand gap analysis**, **route optimization**, **real-time operations dashboards**, and **workflow automation**.
+**수요 예측**, **수급 갭 분석**, **경로 최적화**, **실시간 운영 대시보드**, **워크플로우 자동화**를 아우르는 공유 모빌리티 운영 인텔리전스 플랫폼입니다.
 
-Built during my work as a PMO (Project Management Office) team member, this platform helped optimize fleet utilization, reduce operational costs, and maximize revenue through data-driven decision making.
+PMO(Project Management Office) 팀원으로 근무하며, 차량 가동률 최적화, 운영 비용 절감, 데이터 기반 의사결정을 통한 매출 극대화를 위해 구축했습니다.
 
-> **Note:** This is a sanitized portfolio version. All company-specific data, credentials, and identifying information have been removed or generalized.
+> **참고:** 포트폴리오용으로 정제된 버전입니다. 회사 고유 데이터, 인증 정보, 식별 가능한 정보는 모두 제거 또는 일반화되었습니다.
 
 ---
 
-## Architecture
+## 아키텍처
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│                    Data Sources                               │
-│  BigQuery  ·  Weather API  ·  Google Sheets  ·  App Events   │
+│                      데이터 소스                               │
+│  BigQuery  ·  기상청 API  ·  Google Sheets  ·  앱 이벤트      │
 └──────────┬───────────────────────────────────┬───────────────┘
            │                                   │
            ▼                                   ▼
 ┌─────────────────────┐         ┌──────────────────────────────┐
-│  Demand Forecasting │         │  Operations Dashboard        │
+│    수요 예측 모델     │         │       운영 대시보드            │
 │  ─────────────────  │         │  ──────────────────────────  │
-│  · ML Models (V7/V8)│         │  · Streamlit Multi-page App  │
-│  · Conversion Model │         │  · Center-level KPIs         │
-│  · District-Hour    │         │  · Worker Route Tracking     │
-│  · Weather Adjust   │         │  · Maintenance Performance   │
+│  · ML 모델 (V7/V8)  │         │  · Streamlit 멀티페이지 앱    │
+│  · 전환율 모델       │         │  · 센터별 KPI                │
+│  · 구역×시간대 모델  │         │  · 작업자 동선 추적           │
+│  · 날씨 보정         │         │  · 유지보수 성과 분석         │
 └────────┬────────────┘         └──────────────────────────────┘
          │
          ▼
 ┌─────────────────────┐         ┌──────────────────────────────┐
-│  Supply-Demand Gap  │         │  Workflow Automation          │
+│   수급 갭 분석       │         │      워크플로우 자동화         │
 │  ─────────────────  │         │  ──────────────────────────  │
-│  · Gap Analysis     │         │  · Email → AI Parser         │
-│  · Work Orders      │         │  · Slack Bot Approval        │
-│  · Priority Scoring │         │  · Admin Web Automation      │
-│  · Folium Maps      │         │  · Return Zone Processing    │
+│  · 갭 분석           │         │  · 이메일 → AI 파서           │
+│  · 작업 지시서 생성  │         │  · Slack 봇 승인 처리         │
+│  · 우선순위 스코어링 │         │  · 관제웹 자동화              │
+│  · Folium 지도       │         │  · 반납구역 처리              │
 └────────┬────────────┘         └──────────────────────────────┘
          │
          ▼
 ┌─────────────────────┐         ┌──────────────────────────────┐
-│  Route Optimization │         │  Automated Reports           │
+│    경로 최적화       │         │       자동 리포트              │
 │  ─────────────────  │         │  ──────────────────────────  │
-│  · TSP Solver       │         │  · Monthly Fleet Stats       │
-│  · Cluster-based    │         │  · Slack Integration         │
-│  · Time-slot Split  │         │  · GitHub Actions CI/CD      │
-│  · AntPath Visual   │         │  · Google Sheets Sync        │
+│  · TSP 솔버          │         │  · 월간 기기 현황 리포트      │
+│  · 클러스터 기반     │         │  · Slack 연동                 │
+│  · 시간대 분리       │         │  · GitHub Actions CI/CD      │
+│  · AntPath 시각화    │         │  · Google Sheets 동기화       │
 └─────────────────────┘         └──────────────────────────────┘
 ```
 
-<!-- Screenshots / diagrams can be added here -->
-<!-- ![Dashboard Screenshot](docs/images/dashboard.png) -->
-<!-- ![Gap Map Example](docs/images/gap_map.png) -->
+---
+
+## 주요 모듈
+
+### 1. 수요 예측 (`demand_forecast/`)
+
+ML 기반 구역×시간대 수요 예측 시스템
+
+- **V7 모델** (`demand_model_v7.py`): GradientBoosting + 권역별 날씨/요일 보정
+- **V8 앱오픈 모델** (`app_open_model.py`): 공급 제약 데이터의 순환 의존성을 해결하기 위해 앱 오픈을 먼저 예측한 뒤 전환율을 적용
+- **전환율 모델** (`conversion_model.py`): 지수 포화 곡선으로 바이크 수 → 전환율 학습: `CVR = base + gain * (1 - e^(-decay * bikes))`
+- **구역-시간 모델** (`district_hour_model.py`): 권역 → 구역 → 시간대 계층적 분해
+- **자동 튜너** (`district_hour_tuner.py`, `auto_improve.py`): 백테스팅 기반 파라미터 자동 최적화
+
+### 2. 수급 갭 분석 (`demand_forecast/supply_demand_gap.py`)
+
+예측 수요와 현재 공급을 비교하여 실행 가능한 작업 지시서 생성
+
+- 시간대별 분석 (야간 준비 / 오전 / 오후 / 저녁)
+- 비제약 수요 가중치 기반 우선순위 스코어링
+- 센터별 Excel 작업 지시서 출력
+- Folium 기반 수급 갭 시각화 지도
+
+### 3. 경로 최적화 (`demand_forecast/route_optimization_v5.py`)
+
+리밸런싱 및 배터리 교체 작업자의 이동 경로 최적화
+
+- 시간대 분리 (오후 수요 대응 vs. 저녁 사전 배치)
+- 수요 클러스터 기반 TSP 라우팅
+- 작업 유형 묶음 처리 (리밸런싱, 배터리, 수리)
+- Folium AntPath 애니메이션 경로 시각화
+
+### 4. 운영 대시보드 (`ops_dashboard/`)
+
+멀티페이지 Streamlit 실시간 운영 모니터링 대시보드
+
+- **전센터 대시보드**: 차량 가동률, 수리율, 현장조치율 등 KPI
+- **센터별 대시보드**: 서비스센터별 상세 지표
+- **직원별 동선**: GPS 기반 작업자 이동 경로 시각화
+- **인원별 월간**: 작업자별 월간 실적 통계
+- **유지보수 성과**: 수리 효율, 비용 분석
+
+### 5. 반납구역 승인 자동화 (`return_zone_approval/`)
+
+반납구역 요청 처리 End-to-End 자동화
+
+- Gmail 수신 모니터링
+- AI 기반 문서 파싱 (Claude API)
+- Slack 봇 인터랙티브 승인 워크플로우
+- Playwright 기반 관제웹 자동화
+
+### 6. 자동 리포트 (`bike_stats_report.py`)
+
+월간 기기 현황 리포트 자동 생성 및 Slack 전송
+
+- BigQuery 데이터 집계
+- Slack Block Kit 메시지 포매팅
+- GitHub Actions 스케줄 실행
 
 ---
 
-## Key Modules
+## 기술 스택
 
-### 1. Demand Forecasting (`demand_forecast/`)
-
-ML-powered ride demand prediction at district x hour granularity.
-
-- **V7 Model** (`demand_model_v7.py`): GradientBoosting with region-specific weather/day-of-week corrections
-- **V8 App-Open Model** (`app_open_model.py`): Breaks the circular dependency of supply-constrained ride data by predicting app opens first, then applying conversion rates
-- **Conversion Model** (`conversion_model.py`): Learns the bike_count -> conversion_rate curve using exponential saturation: `CVR = base + gain * (1 - e^(-decay * bikes))`
-- **District-Hour Model** (`district_hour_model.py`): Hierarchical disaggregation from region -> district -> hour
-- **Auto-Tuner** (`district_hour_tuner.py`, `auto_improve.py`): Automated parameter optimization with backtesting
-
-### 2. Supply-Demand Gap Analysis (`demand_forecast/supply_demand_gap.py`)
-
-Compares predicted demand with current bike supply to generate actionable work orders.
-
-- Time-slot based analysis (night prep / morning / afternoon / evening)
-- Priority scoring with unconstrained demand weighting
-- Center-specific Excel work orders
-- Interactive Folium gap visualization maps
-
-### 3. Route Optimization (`demand_forecast/route_optimization_v5.py`)
-
-Optimizes field worker routes for bike rebalancing and battery swap tasks.
-
-- Time-slot separation (afternoon demand response vs. evening preparation)
-- Demand-cluster-based routing with TSP solver
-- Task type bundling (rebalance, battery, repair)
-- Animated route visualization with Folium AntPath
-
-### 4. Operations Dashboard (`ops_dashboard/`)
-
-Multi-page Streamlit dashboard for real-time operations monitoring.
-
-- **All-Center Overview**: Fleet-wide KPIs (availability, repair rate, field action rate)
-- **Per-Center Dashboard**: Detailed metrics per service center
-- **Worker Route Tracking**: GPS-based worker movement visualization
-- **Monthly Performance**: Per-worker monthly statistics
-- **Maintenance Analytics**: Repair efficiency, cost analysis
-
-### 5. Return Zone Approval (`return_zone_approval/`)
-
-End-to-end automation for processing return zone requests.
-
-- Gmail monitoring for incoming requests
-- AI-powered document parsing (Claude API)
-- Slack bot with interactive approval workflow
-- Playwright-based admin web automation
-
-### 6. Automated Reporting (`bike_stats_report.py`)
-
-Monthly fleet statistics report with Slack integration.
-
-- BigQuery data aggregation
-- Slack Block Kit message formatting
-- GitHub Actions scheduled execution
+| 분류 | 기술 |
+|------|------|
+| **언어** | Python 3.11 |
+| **데이터 웨어하우스** | Google BigQuery |
+| **ML/통계** | LightGBM, scikit-learn, SciPy (curve fitting) |
+| **시각화** | Streamlit, Folium, Plotly |
+| **공간 분석** | H3 헥사곤 인덱싱, GeoJSON |
+| **자동화** | Playwright, Gmail API, Slack Bolt |
+| **AI** | Anthropic Claude API (문서 파싱) |
+| **인프라** | GitHub Actions, Firebase |
+| **연동** | Google Sheets API, Slack API, 기상청 API |
 
 ---
 
-## Tech Stack
+## 설치 가이드
 
-| Category | Technologies |
-|----------|-------------|
-| **Language** | Python 3.11 |
-| **Data Warehouse** | Google BigQuery |
-| **ML/Statistics** | LightGBM, scikit-learn, SciPy (curve fitting) |
-| **Visualization** | Streamlit, Folium, Plotly |
-| **Geospatial** | H3 hexagonal indexing, GeoJSON |
-| **Automation** | Playwright, Gmail API, Slack Bolt |
-| **AI** | Anthropic Claude API (document parsing) |
-| **Infrastructure** | GitHub Actions, Firebase |
-| **Integrations** | Google Sheets API, Slack API, Weather API |
-
----
-
-## Setup Guide
-
-### Prerequisites
+### 사전 요구사항
 
 - Python 3.11+
-- Google Cloud service account with BigQuery access (or use sample data)
+- Google Cloud 서비스 계정 (BigQuery 접근 권한) 또는 샘플 데이터 사용
 
-### Installation
+### 설치
 
 ```bash
-# Clone the repository
+# 레포지토리 클론
 git clone https://github.com/mineipark/minei.park.git
 cd minei.park
 
-# Create virtual environment
+# 가상환경 생성
 python -m venv .venv
 source .venv/bin/activate  # Linux/Mac
 # .venv\Scripts\activate   # Windows
 
-# Install dependencies (pick your module)
+# 의존성 설치 (모듈별 선택)
 pip install pandas numpy scikit-learn scipy google-cloud-bigquery folium
-# For dashboard:
+# 대시보드용:
 pip install -r ops_dashboard/requirements.txt
-# For return zone approval:
+# 반납구역 승인용:
 pip install -r return_zone_approval/requirements.txt
 
-# Configure environment
+# 환경 변수 설정
 cp .env.example .env
-# Edit .env with your credentials
+# .env 파일에 실제 값 입력
 ```
 
-### Generate Sample Data
+### 샘플 데이터 생성
 
-If you don't have BigQuery access, generate synthetic data:
+BigQuery 접근이 없는 경우 합성 데이터 생성:
 
 ```bash
 python seed_data.py --days 90 --bikes 500
 ```
 
-### Run the Dashboard
+### 대시보드 실행
 
 ```bash
 cd ops_dashboard
 streamlit run ops_worker_dashboard.py
 ```
 
-### Run Demand Forecast
+### 수요 예측 실행
 
 ```bash
-# Single date prediction
+# 단일 날짜 예측
 python demand_forecast/app_open_model.py --date 2026-02-25
 
-# Supply-demand gap analysis
+# 수급 갭 분석
 python demand_forecast/supply_demand_gap.py --date 2026-02-25
 
-# Route optimization
+# 경로 최적화
 python demand_forecast/route_optimization_v5.py
 ```
 
 ---
 
-## Project Structure
+## 프로젝트 구조
 
 ```
 .
-├── demand_forecast/           # ML demand prediction & optimization
-│   ├── app_open_model.py      # V8: App-open based prediction
-│   ├── demand_model_v7.py     # V7: Region-corrected model
-│   ├── conversion_model.py    # Bike count → conversion rate
-│   ├── district_hour_model.py # District×hour disaggregation
-│   ├── supply_demand_gap.py   # Gap analysis + work orders
-│   ├── route_optimization_v5.py # Field worker route optimizer
-│   ├── relocation_task_system.py # Evening rebalancing support
-│   ├── daily_pipeline.py      # Automated daily prediction pipeline
+├── demand_forecast/           # ML 수요 예측 및 최적화
+│   ├── app_open_model.py      # V8: 앱오픈 기반 예측
+│   ├── demand_model_v7.py     # V7: 권역 보정 모델
+│   ├── conversion_model.py    # 바이크 수 → 전환율
+│   ├── district_hour_model.py # 구역×시간대 분해
+│   ├── supply_demand_gap.py   # 수급 갭 분석 + 작업 지시서
+│   ├── route_optimization_v5.py # 작업자 경로 최적화
+│   ├── relocation_task_system.py # 저녁 리밸런싱 지원
+│   ├── daily_pipeline.py      # 일일 자동 예측 파이프라인
 │   └── ...
-├── ops_dashboard/             # Streamlit operations dashboard
-│   ├── ops_worker_dashboard.py # Main app entry point
-│   ├── pages/                 # Multi-page dashboard views
-│   └── utils/                 # BigQuery, Sheets, calculation helpers
-├── return_zone_approval/      # Automated approval workflow
-│   ├── main.py                # Orchestrator
-│   ├── email_monitor/         # Gmail integration
-│   ├── parser/                # AI document parser
-│   ├── slack_bot/             # Slack interactive bot
-│   ├── automation/            # Admin web automation
-│   └── workflow/              # Approval state machine
-├── service_flow_visualizer/   # Service flow map visualization
-├── reallocation/              # Bike reallocation algorithm
-├── bike_stats_report.py       # Monthly fleet report → Slack
-├── seed_data.py               # Sample data generator
-├── .env.example               # Environment variable template
-├── .github/workflows/         # CI/CD automation
-└── CLAUDE.md                  # AI assistant context
+├── ops_dashboard/             # Streamlit 운영 대시보드
+│   ├── ops_worker_dashboard.py # 메인 앱 진입점
+│   ├── pages/                 # 멀티페이지 대시보드 뷰
+│   └── utils/                 # BigQuery, Sheets, 계산 헬퍼
+├── return_zone_approval/      # 반납구역 승인 자동화
+│   ├── main.py                # 오케스트레이터
+│   ├── email_monitor/         # Gmail 연동
+│   ├── parser/                # AI 문서 파서
+│   ├── slack_bot/             # Slack 인터랙티브 봇
+│   ├── automation/            # 관제웹 자동화
+│   └── workflow/              # 승인 상태 머신
+├── service_flow_visualizer/   # 서비스 플로우 지도 시각화
+├── reallocation/              # 바이크 재배치 알고리즘
+├── bike_stats_report.py       # 월간 기기 현황 → Slack
+├── seed_data.py               # 샘플 데이터 생성기
+├── .env.example               # 환경 변수 템플릿
+└── .github/workflows/         # CI/CD 자동화
 ```
 
 ---
 
-## Key Metrics & Formulas
+## 핵심 지표
 
-| Metric | Formula | Description |
-|--------|---------|-------------|
-| **Accessibility Rate** | `accessible_opens / total_opens` | % of app opens with a bike within 100m |
-| **Conversion Rate** | `rides / accessible_opens` | % of accessible users who actually ride |
-| **Availability Rate** | `usable_bikes / total_bikes` | % of fleet available for rides |
-| **Field Action Rate** | `usable_bikes / on_field_bikes` | % of on-field bikes that are rideable |
-| **Supply-Demand Gap** | `predicted_demand - available_bikes` | Bikes needed per district |
+| 지표 | 산식 | 설명 |
+|------|------|------|
+| **접근성률** | `접근 가능 앱오픈 / 전체 앱오픈` | 100m 이내 바이크가 있는 앱오픈 비율 |
+| **전환율** | `라이딩 수 / 접근 가능 앱오픈` | 접근 가능한 사용자 중 실제 라이딩 비율 |
+| **가동률** | `사용 가능 바이크 / 전체 바이크` | 라이딩 가능한 차량 비율 |
+| **현장조치율** | `사용 가능 바이크 / 현장 바이크` | 현장 배치 차량 중 라이딩 가능 비율 |
+| **수급 갭** | `예측 수요 - 가용 바이크` | 구역별 필요 바이크 수 |
 
-### Analysis Funnel
+### 분석 퍼널
 
 ```
-App Open → Accessible (bike within 100m) → Converted (actual ride)
+앱 오픈 → 접근 가능 (100m 이내 바이크) → 전환 (실제 라이딩)
   │              │                              │
-  └─ Stage 1     └─ Stage 2                     └─ Revenue
-     drop-off:      drop-off:
-     Supply gap      Quality/UX issue
+  └─ Stage 1     └─ Stage 2                     └─ 매출
+     이탈:          이탈:
+     공급 부족       품질/UX 이슈
 ```
 
 ---
 
-## License
+## 라이선스
 
-This project is shared for portfolio and educational purposes. The code architecture and algorithms are original work. All business-specific data has been anonymized.
+본 프로젝트는 포트폴리오 및 학습 목적으로 공유됩니다. 코드 아키텍처와 알고리즘은 본인의 작업물이며, 모든 사업 관련 데이터는 익명화되었습니다.
