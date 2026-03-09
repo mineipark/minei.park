@@ -1,57 +1,34 @@
-# Credentials - NEVER commit these
-credentials/
-*.json.key
-*-service-account.json
-service-account.json
-key.json
-
-# Environment variables
+# 인증 정보 / 키
 .env
-.env.local
-.env.production
-!.env.example
+.env.*
+credentials.json
+service_account*.json
+*.key
+*.pem
+*.p12
+token.json
+
+# 모델 아티팩트
+models/*.pkl
+models/*.txt
+models/*.json
+*.pkl
 
 # Python
 __pycache__/
 *.py[cod]
-*$py.class
-.venv/
-venv/
-env/
-*.pkl
-*.pickle
-
-# Data files (use seed script to generate sample data)
-*.csv
-*.xlsx
-*.xls
-
-# Model artifacts
-demand_forecast/models/*.pkl
-
-# Generated visualizations
-demand_forecast/visualizations/
-*.html
-!**/public/index.html
+*.egg-info/
+dist/
+build/
 
 # IDE
-.idea/
 .vscode/
+.idea/
 *.swp
 *.swo
-
-# OS
 .DS_Store
-Thumbs.db
 
-# Temporary files
-*.tmp
-*.bak
-*.backup_*
-
-# MCP config (contains local paths)
-.mcp.json
-
-# Claude config
-.claude/
-CLAUDE.md
+# 데이터
+*.csv
+*.parquet
+*.db

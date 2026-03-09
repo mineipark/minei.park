@@ -1,247 +1,381 @@
-# 공유 모빌리티 운영 플랫폼
+# 공유 모빌리티 수요 예측 시스템
 
-**수요 예측**, **수급 갭 분석**, **경로 최적화**, **실시간 운영 대시보드**, **워크플로우 자동화**를 아우르는 공유 모빌리티 운영 인텔리전스 플랫폼입니다.
+> 구역(District) 단위 일별 라이딩 수요 예측 시스템. H3 헥스 그리드 기반으로 구역별 수요를 예측하여 기기 재배치, 배터리 관리, 현장 인력 운영을 최적화합니다.
 
-PMO(Project Management Office) 팀원으로 근무하며, 차량 가동률 최적화, 운영 비용 절감, 데이터 기반 의사결정을 통한 매출 극대화를 위해 구축했습니다.
+## 개요
 
-> **참고:** 포트폴리오용으로 정제된 버전입니다. 회사 고유 데이터, 인증 정보, 식별 가능한 정보는 모두 제거 또는 일반화되었습니다.
+본 시스템은 공유 전기자전거 서비스의 **일별 라이딩 수요**를 구역 단위로 예측합니다. 예측 결과는 현장 운영의 핵심 의사결정 엔진으로 활용됩니다.
+
+### 비즈니스 임팩트
+- **재배치 효율화**: 예측 기반 수요 갭 분석으로 기기 이동 우선순위 결정
+- **배터리 운영**: 내일 수요가 높은 구역에 충전 배터리 선배치
+- **인력 스케줄링**: 예측 수요 패턴에 맞춘 현장 인력 배치
+- **매출 극대화**: 전환율 높은 구역에 기기 가용성 확보
 
 ---
 
 ## 아키텍처
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│                      데이터 소스                               │
-│  BigQuery  ·  기상청 API  ·  Google Sheets  ·  앱 이벤트      │
-└──────────┬───────────────────────────────────┬───────────────┘
-           │                                   │
-           ▼                                   ▼
-┌─────────────────────┐         ┌──────────────────────────────┐
-│    수요 예측 모델     │         │       운영 대시보드            │
-│  ─────────────────  │         │  ──────────────────────────  │
-│  · ML 모델 (V7/V8)  │         │  · Streamlit 멀티페이지 앱    │
-│  · 전환율 모델       │         │  · 센터별 KPI                │
-│  · 구역×시간대 모델  │         │  · 작업자 동선 추적           │
-│  · 날씨 보정         │         │  · 유지보수 성과 분석         │
-└────────┬────────────┘         └──────────────────────────────┘
-         │
-         ▼
-┌─────────────────────┐         ┌──────────────────────────────┐
-│   수급 갭 분석       │         │      워크플로우 자동화         │
-│  ─────────────────  │         │  ──────────────────────────  │
-│  · 갭 분석           │         │  · 이메일 → AI 파서           │
-│  · 작업 지시서 생성  │         │  · Slack 봇 승인 처리         │
-│  · 우선순위 스코어링 │         │  · 관제웹 자동화              │
-│  · Folium 지도       │         │  · 반납구역 처리              │
-└────────┬────────────┘         └──────────────────────────────┘
-         │
-         ▼
-┌─────────────────────┐         ┌──────────────────────────────┐
-│    경로 최적화       │         │       자동 리포트              │
-│  ─────────────────  │         │  ──────────────────────────  │
-│  · TSP 솔버          │         │  · 월간 기기 현황 리포트      │
-│  · 클러스터 기반     │         │  · Slack 연동                 │
-│  · 시간대 분리       │         │  · GitHub Actions CI/CD      │
-│  · AntPath 시각화    │         │  · Google Sheets 동기화       │
-└─────────────────────┘         └──────────────────────────────┘
+┌─────────────────────────────────────────────────────────┐
+│              Two-Stage Ensemble Architecture              │
+│                                                           │
+│   predicted_rides = predicted_app_opens × predicted_rpo   │
+│                                                           │
+│  ┌─────────────────┐    ┌──────────────────────┐         │
+│  │  Opens 모델      │    │  RPO 모델             │         │
+│  │  (LightGBM)      │    │  (LightGBM + Huber)   │         │
+│  │                   │    │                        │         │
+│  │  "내일 이 구역에   │    │  "앱을 연 사용자 중    │         │
+│  │   몇 명이 앱을    │    │   실제로 탈 비율은     │         │
+│  │   열 것인가?"     │    │   얼마인가?"           │         │
+│  │                   │    │                        │         │
+│  │  피처: 51개       │    │  피처: 55개            │         │
+│  │  타겟: app_opens  │    │  타겟: rides/opens     │         │
+│  └────────┬──────────┘    └──────────┬─────────────┘         │
+│           │          ×               │                       │
+│           └──────────┬───────────────┘                       │
+│                      ▼                                       │
+│           ┌──────────────────┐                               │
+│           │  후처리 파이프라인 │                               │
+│           │  • RPO Shrinkage  │                               │
+│           │  • Calibration    │                               │
+│           │  • Holiday Adj    │                               │
+│           └──────────────────┘                               │
+└─────────────────────────────────────────────────────────┘
+```
+
+### 왜 Two-Stage인가?
+
+단일 라이딩 모델은 두 가지 서로 다른 신호를 혼합합니다:
+1. **수요 신호** (앱 오픈) — 인구, 날씨, 요일에 의해 결정
+2. **전환 신호** (라이딩/오픈) — 기기 공급, 접근성, 계절 패턴에 의해 결정
+
+분리하면:
+- **What-if 분석**: "이 구역에 기기 10대를 추가하면?" → RPO만 변동
+- **원인 진단**: 예측 오차 원인이 수요 문제인지 전환 문제인지 분리 가능
+- **안정적 RPO 추정**: Shrinkage로 소규모 구역의 극단 예측 방지
+
+---
+
+## 피처 엔지니어링 (7단계)
+
+```
+원본 데이터 → Stage 1~7 → 55개 피처 → LightGBM
+```
+
+| 단계 | 카테고리 | 설명 | 주요 피처 | 대상 모델 |
+|------|----------|------|-----------|-----------|
+| 1 | **셀프 롤링** | 구역별 14일 롤링 통계 | `opens_rolling`, `rpo_rolling`, `opens_cv` | 양쪽 |
+| 2 | **공간** | 2km 반경 이웃 집계 + 허브 참조 | `neighbor_weighted_rpo`, `hub_prev_rpo` | RPO |
+| 3 | **권역** | 상위 권역 수준 집계 | `area_total_opens`, `district_area_share` | 양쪽 |
+| 4 | **시차** | 시차 피처 + 모멘텀 | `opens_lag1/7`, `same_dow_avg`, `trend_7d` | 양쪽 |
+| 5 | **캘린더** | 공휴일, 주말, 연속 휴일 | `is_off`, `is_major_holiday`, `recovery_phase` | 양쪽 |
+| 6 | **날씨** | 기온, 강수, 풍속, 적설, 습도 | `temp_avg`, `rain_sum`, `is_severe_weather` | 양쪽 |
+| 7 | **인터랙션** | 교차 피처 조합 | `rain_off`, `cold_off`, `subway_x_commute` | 양쪽 |
+
+### 공간 피처 엔지니어링 상세
+
+구역은 독립적이지 않습니다. 인접 구역의 수요가 해당 구역에 영향을 줍니다:
+
+```python
+# 이웃 집계: 2km 반경 내 거리 가중 RPO
+dist_weight = 1.0 / max(distance_km, 0.1)
+neighbor_weighted_rpo = Σ(weight_i × rpo_i) / Σ(weight_i)
+
+# 허브 참조: 이웃 중 최대 트래픽 구역을 앵커로 활용
+hub = argmax(avg_opens) among neighbors
+hub_prev_rpo → 허브 구역의 어제 RPO
+```
+
+### 모멘텀 피처
+
+단기 트렌드 포착으로 레짐 변화 감지:
+
+```python
+opens_momentum = MA_7(opens) / MA_28(opens)  # >1 = 상승 추세
+opens_trend_7d = linear_slope(opens, window=7)  # 일간 기울기
+rpo_momentum = MA_7(rpo) / MA_28(rpo)
 ```
 
 ---
 
-## 주요 모듈
+## 데이터 파이프라인
 
-### 1. 수요 예측 (`demand_forecast/`)
+### 데이터 소스
 
-ML 기반 구역×시간대 수요 예측 시스템
+| 소스 | 설명 | 단위 | 갱신 주기 |
+|------|------|------|-----------|
+| 앱 오픈 로그 | GPS 포함 앱 오픈 이벤트 | 이벤트 단위 | 실시간 |
+| 라이딩 기록 | 완료된 라이딩 트랜잭션 | 건당 | 실시간 |
+| 기상 관측 | 기상청 ASOS 관측 데이터 | 일 단위 | 매일 오전 |
+| 기상 예보 | 단기(3일) 예보 API | 3시간 단위 | 6시간마다 |
+| 공휴일 | 법정 공휴일 캘린더 | 연 단위 | 수동 |
+| 기기 스냅샷 | 시간대별 구역별 기기 상태 | 시간 단위 | 매시간 |
 
-- **V7 모델** (`demand_model_v7.py`): GradientBoosting + 권역별 날씨/요일 보정
-- **V8 앱오픈 모델** (`app_open_model.py`): 공급 제약 데이터의 순환 의존성을 해결하기 위해 앱 오픈을 먼저 예측한 뒤 전환율을 적용
-- **전환율 모델** (`conversion_model.py`): 지수 포화 곡선으로 바이크 수 → 전환율 학습: `CVR = base + gain * (1 - e^(-decay * bikes))`
-- **구역-시간 모델** (`district_hour_model.py`): 권역 → 구역 → 시간대 계층적 분해
-- **자동 튜너** (`district_hour_tuner.py`, `auto_improve.py`): 백테스팅 기반 파라미터 자동 최적화
+### OS 스케일 보정
 
-### 2. 수급 갭 분석 (`demand_forecast/supply_demand_gap.py`)
+앱 오픈 추적은 Android 사용자만 대상(전체 라이딩의 약 45%). 지역별 **OS 스케일 팩터**로 보정:
 
-예측 수요와 현재 공급을 비교하여 실행 가능한 작업 지시서 생성
+```
+total_rides ≈ android_app_opens × rides_per_open × os_scale
 
-- 시간대별 분석 (야간 준비 / 오전 / 오후 / 저녁)
-- 비제약 수요 가중치 기반 우선순위 스코어링
-- 센터별 Excel 작업 지시서 출력
-- Folium 기반 수급 갭 시각화 지도
+os_scale = total_rides / android_rides  (지역별, 30일 롤링)
+```
 
-### 3. 경로 최적화 (`demand_forecast/route_optimization_v5.py`)
-
-리밸런싱 및 배터리 교체 작업자의 이동 경로 최적화
-
-- 시간대 분리 (오후 수요 대응 vs. 저녁 사전 배치)
-- 수요 클러스터 기반 TSP 라우팅
-- 작업 유형 묶음 처리 (리밸런싱, 배터리, 수리)
-- Folium AntPath 애니메이션 경로 시각화
-
-### 4. 운영 대시보드 (`ops_dashboard/`)
-
-멀티페이지 Streamlit 실시간 운영 모니터링 대시보드
-
-- **전센터 대시보드**: 차량 가동률, 수리율, 현장조치율 등 KPI
-- **센터별 대시보드**: 서비스센터별 상세 지표
-- **직원별 동선**: GPS 기반 작업자 이동 경로 시각화
-- **인원별 월간**: 작업자별 월간 실적 통계
-- **유지보수 성과**: 수리 효율, 비용 분석
-
-### 5. 반납구역 승인 자동화 (`return_zone_approval/`)
-
-반납구역 요청 처리 End-to-End 자동화
-
-- Gmail 수신 모니터링
-- AI 기반 문서 파싱 (Claude API)
-- Slack 봇 인터랙티브 승인 워크플로우
-- Playwright 기반 관제웹 자동화
-
-### 6. 자동 리포트 (`bike_stats_report.py`)
-
-월간 기기 현황 리포트 자동 생성 및 Slack 전송
-
-- BigQuery 데이터 집계
-- Slack Block Kit 메시지 포매팅
-- GitHub Actions 스케줄 실행
+OS 스케일은 지역별로 유의미하게 차이나며(1.3x ~ 3.6x), 인구 특성에 따른 iOS/Android 채택 비율 차이를 반영합니다.
 
 ---
 
-## 기술 스택
+## 모델 상세
 
-| 분류 | 기술 |
-|------|------|
-| **언어** | Python 3.11 |
-| **데이터 웨어하우스** | Google BigQuery |
-| **ML/통계** | LightGBM, scikit-learn, SciPy (curve fitting) |
-| **시각화** | Streamlit, Folium, Plotly |
-| **공간 분석** | H3 헥사곤 인덱싱, GeoJSON |
-| **자동화** | Playwright, Gmail API, Slack Bolt |
-| **AI** | Anthropic Claude API (문서 파싱) |
-| **인프라** | GitHub Actions, Firebase |
-| **연동** | Google Sheets API, Slack API, 기상청 API |
+### Opens 모델 (LightGBM)
+
+| 파라미터 | 값 |
+|----------|-----|
+| Objective | regression (MSE) |
+| num_leaves | 31 |
+| learning_rate | 0.03 |
+| feature_fraction | 0.7 |
+| bagging_fraction | 0.7 |
+| min_child_samples | 30 |
+| Early stopping | 50 라운드 |
+| 학습 데이터 | 12개월 (전 계절 포함) |
+| 시간 가중치 | 지수 감쇠 (반감기 = 90일) |
+
+**Top 5 피처**: `opens_ma7`, `opens_same_dow_avg`, `opens_lag1`, `app_opens_rolling`, `is_off`
+
+### RPO 모델 (LightGBM + Huber)
+
+| 파라미터 | 값 |
+|----------|-----|
+| Objective | huber (이상치에 강건) |
+| num_leaves | 15 (보수적) |
+| learning_rate | 0.03 |
+| min_child_samples | 50 |
+| RPO 클리핑 | [0, 3.5] |
+| Shrinkage | 롤링 평균 방향 60% 블렌딩 |
+
+**Top 5 피처**: `rpo_rolling`, `area_avg_rpo`, `neighbor_weighted_rpo`, `rpo_x_opens`, `avg_bikes_400m_rolling`
+
+### 후처리 파이프라인
+
+```
+Raw Prediction
+    │
+    ▼
+RPO Shrinkage ───── pred_rpo = α × model_rpo + (1-α) × rolling_rpo  [α=0.6]
+    │
+    ▼
+소규모 구역 클리핑 ── opens < 15 → RPO를 권역 중위수 × 1.15로 제한
+    │
+    ▼
+구역 캘리브레이션 ── 학습된 편향 보정 계수 적용 [0.5 ~ 1.5]
+    │
+    ▼
+요일 캘리브레이션 ── 요일별 계통적 편향 보정 [0.7 ~ 1.3]
+    │
+    ▼
+명절 감쇠 ───────── 대형 명절 추가 감쇠 팩터
+    │
+    ▼
+최종 예측값
+```
 
 ---
 
-## 설치 가이드
+## 전환율 모델
 
-### 사전 요구사항
+기기 공급량과 전환율 사이의 관계를 모델링하는 독립 모델:
 
-- Python 3.11+
-- Google Cloud 서비스 계정 (BigQuery 접근 권한) 또는 샘플 데이터 사용
-
-### 설치
-
-```bash
-# 레포지토리 클론
-git clone https://github.com/mineipark/minei.park.git
-cd minei.park
-
-# 가상환경 생성
-python -m venv .venv
-source .venv/bin/activate  # Linux/Mac
-# .venv\Scripts\activate   # Windows
-
-# 의존성 설치 (모듈별 선택)
-pip install pandas numpy scikit-learn scipy google-cloud-bigquery folium
-# 대시보드용:
-pip install -r ops_dashboard/requirements.txt
-# 반납구역 승인용:
-pip install -r return_zone_approval/requirements.txt
-
-# 환경 변수 설정
-cp .env.example .env
-# .env 파일에 실제 값 입력
+```
+conversion_rate = base_rate + max_gain × (1 - e^(-decay × bike_count))
 ```
 
-### 샘플 데이터 생성
+이 포화 함수는 기기 추가의 체감 효과를 포착합니다:
+- **기기 0대**: ~36% 전환 (사용자가 주변 기기까지 걸어감)
+- **기기 1대**: ~54% 전환 (대부분 전환)
+- **기기 3대+**: ~72% 전환 (거의 포화)
 
-BigQuery 접근이 없는 경우 합성 데이터 생성:
+### 활용
+- **역함수**: 목표 전환율 → 필요 기기 대수 산출
+- **잠재 수요 추정**: 기기 무제한 공급 시 추정 라이딩 건수
+- **What-if 분석**: 기기 증감에 따른 매출 영향 시뮬레이션
 
-```bash
-python seed_data.py --days 90 --bikes 500
+---
+
+## 시간대 분배
+
+일간 예측을 3시간 단위 윈도우로 분배:
+
+| 윈도우 | 시간대 | 특성 |
+|--------|--------|------|
+| 새벽 | 00-05 | 비수요 시간 |
+| 오전 | 06-08 | 출근 피크 |
+| 오전중 | 09-11 | 여가 |
+| 점심 | 12-14 | 점심 피크 |
+| 오후 | 15-17 | 여가 |
+| 저녁 | 18-20 | 퇴근 + 저녁 피크 |
+| 야간 | 21-23 | 비수요 시간 |
+
+시간대별 기온 보정 적용 — 출퇴근 시간은 여가 시간보다 날씨 민감도가 낮습니다.
+
+---
+
+## 평가 결과
+
+### 테스트 기간 성능 (2주 홀드아웃)
+
+| 지표 | 값 |
+|------|-----|
+| **구역별 MAPE** | ~35% |
+| **일간 집계 MAPE** | ~8% |
+| **Bias** | < ±3% |
+| vs. 베이스라인 (lag-7) | -15%p 개선 |
+| vs. 오라클 (실제 opens) | +8%p opens 예측 비용 |
+
+### 구역 규모별 성능
+
+| 규모 분류 | 일평균 Opens | MAPE | 비고 |
+|-----------|-------------|------|------|
+| 소규모 (8-15) | ~11 | ~50% | 높은 분산, 소표본 |
+| 중규모 (15-30) | ~22 | ~35% | 핵심 운영 구간 |
+| 대규모 (30-60) | ~45 | ~28% | 안정적 예측 |
+| 초대규모 (60+) | ~90 | ~22% | 최고 정확도 |
+
+### 핵심 인사이트: 오차 분해
+
+```
+전체 오차 = Opens 오차 × RPO 오차 (곱셈적)
+
+Opens 모델 MAPE: ~25%  → "얼마나 많은 사람이 올 것인가"
+RPO 모델 MAPE:   ~20%  → "그 중 몇 비율이 탈 것인가"
+통합 MAPE:       ~35%  → 곱셈적 오차 증폭
 ```
 
-### 대시보드 실행
+곱셈 결합이므로 두 모델 모두 정확해야 좋은 예측이 가능합니다. 단일 라이딩 모델은 유사한 MAPE를 달성하지만 운영 인사이트를 위한 분해가 불가능합니다.
 
-```bash
-cd ops_dashboard
-streamlit run ops_worker_dashboard.py
+---
+
+## 일간 자동화 파이프라인
+
+```
+┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐
+│  기상     │───▶│  예측     │───▶│  실적    │───▶│  평가     │
+│  업데이트  │    │ D+0, D+1 │    │  백필     │    │  정확도   │
+└──────────┘    └──────────┘    └──────────┘    └──────────┘
+                                                      │
+┌──────────┐    ┌──────────┐    ┌──────────────┐      │
+│  시트     │◀───│  아카이브 │◀───│  자동 학습   │◀─────┘
+│  동기화    │    │  적재     │    │  보정 계수   │
+└──────────┘    └──────────┘    └──────────────┘
 ```
 
-### 수요 예측 실행
-
-```bash
-# 단일 날짜 예측
-python demand_forecast/app_open_model.py --date 2026-02-25
-
-# 수급 갭 분석
-python demand_forecast/supply_demand_gap.py --date 2026-02-25
-
-# 경로 최적화
-python demand_forecast/route_optimization_v5.py
-```
+자동화 실행 (GitHub Actions):
+1. 기상 데이터 갱신 (관측 + 예보 API)
+2. 구역별 D+0, D+1 예측 생성
+3. 시간대별 분배
+4. 전일 실적 백필
+5. 예측 오차 계산 및 보정 계수 자동 조정
+6. 결과 아카이브 및 운영 대시보드 연동
 
 ---
 
 ## 프로젝트 구조
 
 ```
-.
-├── demand_forecast/           # ML 수요 예측 및 최적화
-│   ├── app_open_model.py      # V8: 앱오픈 기반 예측
-│   ├── demand_model_v7.py     # V7: 권역 보정 모델
-│   ├── conversion_model.py    # 바이크 수 → 전환율
-│   ├── district_hour_model.py # 구역×시간대 분해
-│   ├── supply_demand_gap.py   # 수급 갭 분석 + 작업 지시서
-│   ├── route_optimization_v5.py # 작업자 경로 최적화
-│   ├── relocation_task_system.py # 저녁 리밸런싱 지원
-│   ├── daily_pipeline.py      # 일일 자동 예측 파이프라인
-│   └── ...
-├── ops_dashboard/             # Streamlit 운영 대시보드
-│   ├── ops_worker_dashboard.py # 메인 앱 진입점
-│   ├── pages/                 # 멀티페이지 대시보드 뷰
-│   └── utils/                 # BigQuery, Sheets, 계산 헬퍼
-├── return_zone_approval/      # 반납구역 승인 자동화
-│   ├── main.py                # 오케스트레이터
-│   ├── email_monitor/         # Gmail 연동
-│   ├── parser/                # AI 문서 파서
-│   ├── slack_bot/             # Slack 인터랙티브 봇
-│   ├── automation/            # 관제웹 자동화
-│   └── workflow/              # 승인 상태 머신
-├── service_flow_visualizer/   # 서비스 플로우 지도 시각화
-├── reallocation/              # 바이크 재배치 알고리즘
-├── bike_stats_report.py       # 월간 기기 현황 → Slack
-├── seed_data.py               # 샘플 데이터 생성기
-├── .env.example               # 환경 변수 템플릿
-└── .github/workflows/         # CI/CD 자동화
+demand_forecast_portfolio/
+├── README.md                    # 본 문서
+├── requirements.txt             # Python 의존성
+├── config.py                    # 하이퍼파라미터 및 상수 정의
+│
+├── features/                    # 피처 엔지니어링 (7단계)
+│   ├── __init__.py
+│   ├── rolling_features.py      # Stage 1: 셀프 롤링 통계
+│   ├── spatial_features.py      # Stage 2: 이웃 + 허브 피처
+│   ├── area_features.py         # Stage 3: 권역 수준 집계
+│   ├── lag_features.py          # Stage 4: 시차 + 모멘텀 피처
+│   ├── calendar_features.py     # Stage 5: 캘린더 + 공휴일
+│   ├── weather_features.py      # Stage 6: 날씨 피처
+│   └── interaction_features.py  # Stage 7: 교차 피처 인터랙션
+│
+├── models/                      # 모델 정의
+│   ├── __init__.py
+│   ├── opens_model.py           # 앱 오픈 LightGBM 모델
+│   ├── rpo_model.py             # RPO LightGBM 모델
+│   └── postprocessing.py        # RPO shrinkage, 캘리브레이션, 클리핑
+│
+├── pipeline/                    # 엔드투엔드 파이프라인
+│   ├── __init__.py
+│   ├── training_pipeline.py     # 전체 학습 워크플로우
+│   ├── prediction_pipeline.py   # 추론 파이프라인
+│   └── evaluation.py            # MAPE/MAE/RMSE + 진단 리포트
+│
+├── conversion/                  # 공급 → 전환 모델
+│   ├── __init__.py
+│   └── conversion_model.py      # 포화 함수: 기기 수 → 전환율
+│
+├── utils/                       # 유틸리티
+│   ├── __init__.py
+│   └── metrics.py               # 오차 지표
+│
+├── data/                        # 샘플 데이터 생성
+│   └── generate_sample.py       # 합성 데이터 생성기
+│
+└── run_demo.py                  # 엔드투엔드 데모 스크립트
 ```
 
 ---
 
-## 핵심 지표
+## 기술 스택
 
-| 지표 | 산식 | 설명 |
-|------|------|------|
-| **접근성률** | `접근 가능 앱오픈 / 전체 앱오픈` | 100m 이내 바이크가 있는 앱오픈 비율 |
-| **전환율** | `라이딩 수 / 접근 가능 앱오픈` | 접근 가능한 사용자 중 실제 라이딩 비율 |
-| **가동률** | `사용 가능 바이크 / 전체 바이크` | 라이딩 가능한 차량 비율 |
-| **현장조치율** | `사용 가능 바이크 / 현장 바이크` | 현장 배치 차량 중 라이딩 가능 비율 |
-| **수급 갭** | `예측 수요 - 가용 바이크` | 구역별 필요 바이크 수 |
+| 구성 | 기술 |
+|------|------|
+| ML 프레임워크 | LightGBM |
+| 데이터 처리 | Pandas, NumPy |
+| 공간 분석 | SciPy (cdist), H3 헥스 그리드 |
+| 기상 API | 기상청 ASOS |
+| 데이터 웨어하우스 | Cloud DW (SQL 기반) |
+| 자동화 | CI/CD 파이프라인 |
+| 대시보드 | 스프레드시트, Streamlit |
+| 언어 | Python 3.10+ |
 
-### 분석 퍼널
+---
 
-```
-앱 오픈 → 접근 가능 (100m 이내 바이크) → 전환 (실제 라이딩)
-  │              │                              │
-  └─ Stage 1     └─ Stage 2                     └─ 매출
-     이탈:          이탈:
-     공급 부족       품질/UX 이슈
+## 실행 방법
+
+```bash
+# 의존성 설치
+pip install -r requirements.txt
+
+# 합성 데이터로 데모 실행
+python run_demo.py
+
+# 학습 (데이터 웨어하우스 접근 필요)
+python -m pipeline.training_pipeline
+
+# 예측
+python -m pipeline.prediction_pipeline --date 2026-03-10
 ```
 
 ---
 
-## 라이선스
+## 핵심 설계 결정
 
-본 프로젝트는 포트폴리오 및 학습 목적으로 공유됩니다. 코드 아키텍처와 알고리즘은 본인의 작업물이며, 모든 사업 관련 데이터는 익명화되었습니다.
+1. **Two-stage vs 단일 모델**: 분해 가능성 > 소폭의 정확도 이득
+2. **LightGBM vs 딥러닝**: 테이블 데이터, 피처 중요도 해석 가능, 빠른 학습
+3. **RPO에 Huber loss**: 이상치 전환율에 강건 (이벤트, 데이터 오류)
+4. **시간 가중치 학습**: 지수 감쇠 (반감기 90일)로 최근 패턴 우선
+5. **RPO Shrinkage**: 롤링 평균 방향 60% 블렌딩으로 소규모 구역 안정화
+6. **공간 이웃 피처**: 2km 반경으로 지역 수요 파급 효과 포착
+7. **구역 단위 해상도**: H3 헥스 그리드 (~500m)로 정밀도와 표본 크기 균형
+
+---
+
+## 향후 개선 계획
+
+- [ ] 실시간 기기 가용성을 동적 피처로 추가
+- [ ] 이벤트 기반 수요 스파이크 반영 (콘서트, 스포츠 경기)
+- [ ] GNN(Graph Neural Network)으로 공간 이웃 인터랙션 모델링
+- [ ] 확률적 예측 (분위 회귀)으로 리스크 인지 운영
+- [ ] 온라인 러닝으로 신규 구역 빠른 적응

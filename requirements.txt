@@ -1,0 +1,14 @@
+# Demand Forecast System — Dependencies
+
+# Core
+numpy>=1.24.0
+pandas>=2.0.0
+scipy>=1.10.0
+scikit-learn>=1.3.0
+
+# ML (recommended; falls back to sklearn if unavailable)
+lightgbm>=4.0.0
+
+# Optional: visualization
+# matplotlib>=3.7.0
+# seaborn>=0.12.0
