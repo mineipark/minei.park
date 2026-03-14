@@ -183,9 +183,9 @@ def step3_backfill_actual(dates: list) -> dict:
         r.h3_start_area_name as region,
         COALESCE(c.name, 'unknown') as center_name,
         COUNT(*) as ride_count
-    FROM `bikeshare.service.rides` r
-    LEFT JOIN `bikeshare.service.geo_area` a ON r.h3_start_area_name = a.name
-    LEFT JOIN `bikeshare.service.service_center` c ON a.center_id = c.id
+    FROM `service.rides` r
+    LEFT JOIN `service.geo_area` a ON r.h3_start_area_name = a.name
+    LEFT JOIN `service.service_center` c ON a.center_id = c.id
     WHERE DATE(r.start_time) IN UNNEST(@dates)
     GROUP BY ride_date, region, center_name
     ORDER BY ride_date

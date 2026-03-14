@@ -165,7 +165,7 @@ class AppOpenPredictor:
             h3_area_name as region,
             date,
             COUNT(*) as app_opens
-        FROM `bikeshare.service.app_accessibility`
+        FROM `service.app_accessibility`
         WHERE date BETWEEN '{start_date}' AND '{end_date}'
             AND h3_area_name IS NOT NULL
         GROUP BY 1, 2
@@ -359,7 +359,7 @@ class AppOpenPredictor:
             COUNT(*) as app_opens,
             AVG(ST_Y(location)) as lat,
             AVG(ST_X(location)) as lng
-        FROM `bikeshare.service.app_accessibility`
+        FROM `service.app_accessibility`
         WHERE date BETWEEN '{start_date}' AND '{end_date}'
             AND h3_area_name IS NOT NULL
             AND h3_district_name IS NOT NULL
@@ -435,7 +435,7 @@ class AppOpenPredictor:
                 h3_district_name as district,
                 EXTRACT(HOUR FROM event_time) as hour,
                 COUNT(*) as app_opens
-            FROM `bikeshare.service.app_accessibility`
+            FROM `service.app_accessibility`
             WHERE DATE(event_time) BETWEEN '{start_date}' AND '{end_date}'
                 AND {day_filter}
                 AND h3_area_name IS NOT NULL
@@ -537,7 +537,7 @@ class AppOpenPredictor:
                 date,
                 COUNT(*) as app_opens,
                 AVG(bike_count_100) as avg_bike_count
-            FROM `bikeshare.service.app_accessibility`
+            FROM `service.app_accessibility`
             WHERE date BETWEEN '{start_date}' AND '{end_date}'
                 AND h3_area_name IS NOT NULL
             GROUP BY 1, 2
@@ -547,7 +547,7 @@ class AppOpenPredictor:
                 h3_start_area_name as region,
                 DATE(start_time) as date,
                 COUNT(*) as rides
-            FROM `bikeshare.service.rides`
+            FROM `service.rides`
             WHERE DATE(start_time) BETWEEN '{start_date}' AND '{end_date}'
                 AND h3_start_area_name IS NOT NULL
             GROUP BY 1, 2
@@ -616,13 +616,13 @@ class AppOpenPredictor:
         query = f"""
         WITH aos_users AS (
             SELECT DISTINCT user_id
-            FROM `bikeshare.service.app_accessibility`
+            FROM `service.app_accessibility`
             WHERE date BETWEEN '{start_date}' AND '{end_date}'
                 AND user_id IS NOT NULL
         ),
         region_opens AS (
             SELECT h3_area_name as region, COUNT(*) as aos_opens
-            FROM `bikeshare.service.app_accessibility`
+            FROM `service.app_accessibility`
             WHERE date BETWEEN '{start_date}' AND '{end_date}'
                 AND h3_area_name IS NOT NULL
             GROUP BY 1
@@ -633,7 +633,7 @@ class AppOpenPredictor:
                 COUNTIF(a.user_id IS NOT NULL) as aos_rides,
                 COUNTIF(a.user_id IS NULL) as non_aos_rides,
                 COUNT(*) as total_rides
-            FROM `bikeshare.service.rides` r
+            FROM `service.rides` r
             LEFT JOIN aos_users a ON r.user_id = a.user_id
             WHERE DATE(r.start_time) BETWEEN '{start_date}' AND '{end_date}'
                 AND r.h3_start_area_name IS NOT NULL
@@ -1276,7 +1276,7 @@ class AppOpenPredictor:
             h3_start_district_name as district,
             EXTRACT(HOUR FROM start_time) as hour,
             COUNT(*) as actual_rides
-        FROM `bikeshare.service.rides`
+        FROM `service.rides`
         WHERE DATE(start_time) = '{target_date}'
             AND h3_start_area_name IS NOT NULL
             AND h3_start_district_name IS NOT NULL

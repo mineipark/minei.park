@@ -197,7 +197,7 @@ def load_time_efficiency_data(start_date: str, end_date: str, _version: str = CA
         ROUND(STDDEV(total_duration_min), 1) as stddev_duration,
         ROUND(MIN(total_duration_min), 1) as min_duration,
         ROUND(MAX(total_duration_min), 1) as max_duration
-    FROM `bikeshare.sheets.repairs`
+    FROM `sheets.repairs`
     WHERE DATE(created_at) BETWEEN '{start_date}' AND '{end_date}'
         AND total_duration_min BETWEEN 1 AND 120
         AND center_name IN ({','.join([f"'{c}'" for c in ALL_CENTERS])})
@@ -214,7 +214,7 @@ def load_time_distribution_data(start_date: str, end_date: str, _version: str = 
     SELECT
         center_name,
         total_duration_min as duration
-    FROM `bikeshare.sheets.repairs`
+    FROM `sheets.repairs`
     WHERE DATE(created_at) BETWEEN '{start_date}' AND '{end_date}'
         AND total_duration_min BETWEEN 1 AND 120
         AND center_name IN ({','.join([f"'{c}'" for c in ALL_CENTERS])})
@@ -233,13 +233,13 @@ def load_cost_efficiency_data(start_date: str, end_date: str, _version: str = CA
         ROUND(APPROX_QUANTILES(p.total_parts_cost, 100)[OFFSET(50)], 0) as median_parts_cost,
         ROUND(AVG(p.part_item_cnt), 1) as avg_part_types,
         SUM(p.total_parts_cost) as total_parts_cost
-    FROM `bikeshare.sheets.repairs` r
+    FROM `sheets.repairs` r
     LEFT JOIN (
         SELECT
             repair_id,
             SUM(parts_cost_sum) as total_parts_cost,
             COUNT(DISTINCT Item) as part_item_cnt
-        FROM `bikeshare.sheets.repair_parts`
+        FROM `sheets.repair_parts`
         GROUP BY repair_id
     ) p ON r.repair_id = p.repair_id
     WHERE DATE(r.created_at) BETWEEN '{start_date}' AND '{end_date}'
@@ -259,13 +259,13 @@ def load_cost_scatter_data(start_date: str, end_date: str, _version: str = CACHE
         r.repair_id,
         COALESCE(p.total_parts_cost, 0) as parts_cost,
         COALESCE(p.part_item_cnt, 0) as part_count
-    FROM `bikeshare.sheets.repairs` r
+    FROM `sheets.repairs` r
     LEFT JOIN (
         SELECT
             repair_id,
             SUM(parts_cost_sum) as total_parts_cost,
             COUNT(DISTINCT Item) as part_item_cnt
-        FROM `bikeshare.sheets.repair_parts`
+        FROM `sheets.repair_parts`
         GROUP BY repair_id
     ) p ON r.repair_id = p.repair_id
     WHERE DATE(r.created_at) BETWEEN '{start_date}' AND '{end_date}'
@@ -284,7 +284,7 @@ def load_quality_efficiency_data(start_date: str, end_date: str, _version: str =
             bike_sn,
             created_at,
             LEAD(created_at) OVER (PARTITION BY bike_sn ORDER BY created_at) as next_repair_at
-        FROM `bikeshare.sheets.repairs`
+        FROM `sheets.repairs`
         WHERE DATE(created_at) BETWEEN '{start_date}' AND '{end_date}'
             AND center_name IN ({','.join([f"'{c}'" for c in ALL_CENTERS])})
     )
@@ -314,7 +314,7 @@ def load_quality_distribution_data(start_date: str, end_date: str, _version: str
             bike_sn,
             created_at,
             LEAD(created_at) OVER (PARTITION BY bike_sn ORDER BY created_at) as next_repair_at
-        FROM `bikeshare.sheets.repairs`
+        FROM `sheets.repairs`
         WHERE DATE(created_at) BETWEEN '{start_date}' AND '{end_date}'
             AND center_name IN ({','.join([f"'{c}'" for c in ALL_CENTERS])})
     )
@@ -340,10 +340,10 @@ def load_daily_trend_data(start_date: str, end_date: str, _version: str = CACHE_
         ROUND(AVG(r.total_duration_min), 1) as avg_duration,
         ROUND(SUM(p.total_parts_cost), 0) as total_cost,
         ROUND(AVG(p.total_parts_cost), 0) as avg_cost
-    FROM `bikeshare.sheets.repairs` r
+    FROM `sheets.repairs` r
     LEFT JOIN (
         SELECT repair_id, SUM(parts_cost_sum) as total_parts_cost
-        FROM `bikeshare.sheets.repair_parts`
+        FROM `sheets.repair_parts`
         GROUP BY repair_id
     ) p ON r.repair_id = p.repair_id
     WHERE r.total_duration_min BETWEEN 1 AND 120
@@ -372,7 +372,7 @@ def load_processing_rate_data(start_date: str, end_date: str, _version: str = CA
             center_name,
             SUM(CASE WHEN bike_status_tf = '관리중' THEN bike_cnt ELSE 0 END) as in_repair,
             SUM(bike_cnt) as total
-        FROM `bikeshare.management.daily_bike`
+        FROM `management.daily_bike`
         WHERE date BETWEEN '{start_date}' AND '{end_date}'
           AND center_name IN ({centers_str})
           AND is_usable = TRUE

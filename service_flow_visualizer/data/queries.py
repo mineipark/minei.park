@@ -34,7 +34,7 @@ def get_riding_events_query(target_date: str, region: str = None, limit: int = D
         ST_Y(r.end_location) as end_lat,
         ST_X(r.end_location) as end_lng,
         h3_start_area_name as region
-    FROM `bikeshare.service.rides` r
+    FROM `service.rides` r
     WHERE DATE(r.start_time) = '{target_date}'
         AND r.start_location IS NOT NULL
         AND r.end_location IS NOT NULL
@@ -59,7 +59,7 @@ def get_riding_events_query(target_date: str, region: str = None, limit: int = D
         ST_Y(r.start_location) as end_lat,
         ST_X(r.start_location) as end_lng,
         h3_end_area_name as region
-    FROM `bikeshare.service.rides` r
+    FROM `service.rides` r
     WHERE DATE(r.end_time) = '{target_date}'
         AND r.end_location IS NOT NULL
         {region_filter_end}
@@ -94,7 +94,7 @@ def get_app_events_query(target_date: str, region: str = None, limit: int = DEFA
         CAST(NULL AS FLOAT64) as end_lat,
         CAST(NULL AS FLOAT64) as end_lng,
         h3_area_name as region
-    FROM `bikeshare.service.app_accessibility`
+    FROM `service.app_accessibility`
     WHERE DATE(event_time) = '{target_date}'
         AND location IS NOT NULL
         {region_filter}
@@ -138,14 +138,14 @@ def get_maintenance_events_query(target_date: str, region: str = None, center: s
             COALESCE(ms.staff_id, s_lookup.id) AS resolved_staff_id,
             ms.type as stack_type,
             DATETIME(ms.created_at, 'Asia/Seoul') as event_time_kst
-        FROM `bikeshare.service.maintenance_log` ms
-        LEFT JOIN `bikeshare.service.staff` s_lookup
+        FROM `service.maintenance_log` ms
+        LEFT JOIN `service.staff` s_lookup
             ON s_lookup.user_id = ms.manager_id
         WHERE DATE(DATETIME(ms.created_at, 'Asia/Seoul')) = '{target_date}'
     ) ms_base
-    JOIN `bikeshare.service.maintenance` m ON m.id = ms_base.maintenance_id
-    JOIN `bikeshare.service.staff` s ON s.id = ms_base.resolved_staff_id
-    JOIN `bikeshare.service.service_center` mc ON mc.id = s.center_id
+    JOIN `service.maintenance` m ON m.id = ms_base.maintenance_id
+    JOIN `service.staff` s ON s.id = ms_base.resolved_staff_id
+    JOIN `service.service_center` mc ON mc.id = s.center_id
     WHERE m.status != 1
         AND COALESCE(m.location_complete, m.location_call) IS NOT NULL
         {center_filter}
@@ -174,7 +174,7 @@ def get_riding_paths_query(target_date: str, region: str = None, limit: int = 20
         TIMESTAMP_DIFF(r.end_time, r.start_time, SECOND) as duration_sec,
         h3_start_area_name as start_region,
         h3_end_area_name as end_region
-    FROM `bikeshare.service.rides` r
+    FROM `service.rides` r
     WHERE DATE(r.start_time) = '{target_date}'
         AND r.start_location IS NOT NULL
         AND r.end_location IS NOT NULL
@@ -207,11 +207,11 @@ def get_staff_movements_query(target_date: str, center: str = None, limit: int =
                 WHEN m.type = 0 AND ms.type = 80 THEN 'rebalance_deploy'
             END as work_type,
             CAST(NULL AS STRING) as bike_sn
-        FROM `bikeshare.service.maintenance_log` ms
-        JOIN `bikeshare.service.maintenance` m ON m.id = ms.maintenance_id
-        LEFT JOIN `bikeshare.service.staff` s_lookup ON s_lookup.user_id = ms.manager_id
-        JOIN `bikeshare.service.staff` s ON s.id = COALESCE(ms.staff_id, s_lookup.id)
-        JOIN `bikeshare.service.service_center` mc ON mc.id = s.center_id
+        FROM `service.maintenance_log` ms
+        JOIN `service.maintenance` m ON m.id = ms.maintenance_id
+        LEFT JOIN `service.staff` s_lookup ON s_lookup.user_id = ms.manager_id
+        JOIN `service.staff` s ON s.id = COALESCE(ms.staff_id, s_lookup.id)
+        JOIN `service.service_center` mc ON mc.id = s.center_id
         WHERE DATE(DATETIME(ms.created_at, 'Asia/Seoul')) = '{target_date}'
             AND m.status != 1
             AND COALESCE(m.location_complete, m.location_call) IS NOT NULL

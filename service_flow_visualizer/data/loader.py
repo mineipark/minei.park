@@ -19,15 +19,14 @@ from data.queries import (
 )
 
 # 인증 설정
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-KEY_PATH = os.path.join(SCRIPT_DIR, '..', '..', 'key.json')
+CREDENTIALS_PATH = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
 
 SCOPES = [
     "https://www.googleapis.com/auth/bigquery",
 ]
 
-credentials = service_account.Credentials.from_service_account_file(KEY_PATH, scopes=SCOPES)
-client = bigquery.Client(credentials=credentials, project=credentials.project_id)
+credentials = service_account.Credentials.from_service_account_file(CREDENTIALS_PATH, scopes=SCOPES)
+client = bigquery.Client(credentials=credentials, project=os.environ.get("GCP_PROJECT_ID"))
 
 
 def _create_client():

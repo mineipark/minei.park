@@ -68,9 +68,9 @@ ops_dashboard/
 ## 데이터 소스
 
 ### BigQuery
-- `bikeshare.service.rides` - 라이딩 데이터
-- `bikeshare.service.service_center` - 센터 정보
-- `bikeshare.service.geo_area` - 권역 정보
+- `service.rides` - 라이딩 데이터
+- `service.service_center` - 센터 정보
+- `service.geo_area` - 권역 정보
 
 ### Google Sheets
 - 운영 관련 외부 데이터 연동

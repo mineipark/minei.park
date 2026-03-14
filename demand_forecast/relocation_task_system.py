@@ -99,7 +99,7 @@ def get_demand_forecast(target_date, target_regions):
             AVG(ST_Y(start_location)) as lat,
             AVG(ST_X(start_location)) as lng,
             COUNT(*) as rides
-        FROM `bikeshare.service.rides`
+        FROM `service.rides`
         WHERE DATE(start_time) BETWEEN DATE_SUB('{target_date}', INTERVAL 28 DAY) AND DATE_SUB('{target_date}', INTERVAL 1 DAY)
             AND EXTRACT(DAYOFWEEK FROM start_time) = {day_of_week}
             AND h3_start_area_name IN ('{regions_str}')
@@ -146,7 +146,7 @@ def get_current_bike_positions(target_regions, snapshot_hour=21):
         SUM(CASE WHEN is_usable = TRUE THEN 1 ELSE 0 END) as usable_count,
         SUM(CASE WHEN leftover < 30 THEN 1 ELSE 0 END) as low_battery_count,
         AVG(leftover) as avg_battery
-    FROM `bikeshare.service.bike_snapshot`
+    FROM `service.bike_snapshot`
     WHERE DATE(time) = CURRENT_DATE('Asia/Seoul')
         AND EXTRACT(HOUR FROM time) = {snapshot_hour}
         AND h3_area_name IN ('{regions_str}')
@@ -181,7 +181,7 @@ def get_current_bike_positions_historical(target_regions, reference_date, snapsh
         SUM(CASE WHEN is_usable = TRUE THEN 1 ELSE 0 END) as usable_count,
         SUM(CASE WHEN leftover < 30 THEN 1 ELSE 0 END) as low_battery_count,
         AVG(leftover) as avg_battery
-    FROM `bikeshare.service.bike_snapshot`
+    FROM `service.bike_snapshot`
     WHERE DATE(time) = '{reference_date}'
         AND EXTRACT(HOUR FROM time) = {snapshot_hour}
         AND h3_area_name IN ('{regions_str}')

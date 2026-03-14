@@ -429,7 +429,7 @@ class ConversionModel:
             COUNT(*) as total_events,
             SUM(CASE WHEN is_accessible THEN 1 ELSE 0 END) as accessible_events,
             SUM(CASE WHEN is_converted THEN 1 ELSE 0 END) as converted_events
-        FROM `bikeshare.service.app_accessibility`
+        FROM `service.app_accessibility`
         WHERE date BETWEEN '{start_date}' AND '{end_date}'
             AND h3_area_name IS NOT NULL
         GROUP BY bike_count_100, hour_group{region_group}
@@ -532,7 +532,7 @@ class ConversionModel:
             FORMAT_DATE('%Y-%m', date) as month,
             COUNT(*) as total_events,
             SUM(CASE WHEN is_converted THEN 1 ELSE 0 END) as converted_events
-        FROM `bikeshare.service.app_accessibility`
+        FROM `service.app_accessibility`
         WHERE date BETWEEN '{start_date}' AND '{end_date}'
             AND h3_area_name IS NOT NULL
         GROUP BY 1, 2, 3
@@ -650,7 +650,7 @@ class ConversionModel:
             h3_district_name as district,
             EXTRACT(HOUR FROM event_time) as hour,
             AVG(bike_count_100) as avg_bike_count_100
-        FROM `bikeshare.service.app_accessibility`
+        FROM `service.app_accessibility`
         WHERE date BETWEEN '{start_date}' AND '{end_date}'
             AND h3_area_name IS NOT NULL
             AND h3_district_name IS NOT NULL

@@ -144,7 +144,7 @@ def get_actual_rides_district(client, target_date: str) -> pd.DataFrame:
         COUNT(*) as ride_count,
         AVG(ST_Y(start_location)) as lat,
         AVG(ST_X(start_location)) as lng
-    FROM `bikeshare.service.rides`
+    FROM `service.rides`
     WHERE DATE(start_time) = '{target_date}'
         AND h3_start_area_name IS NOT NULL
         AND h3_start_district_name IS NOT NULL
@@ -162,7 +162,7 @@ def get_actual_rides_region(client, target_date: str) -> pd.DataFrame:
         COUNT(*) as ride_count,
         AVG(ST_Y(start_location)) as lat,
         AVG(ST_X(start_location)) as lng
-    FROM `bikeshare.service.rides`
+    FROM `service.rides`
     WHERE DATE(start_time) = '{target_date}'
         AND h3_start_area_name IS NOT NULL
         AND start_location IS NOT NULL
@@ -178,7 +178,7 @@ def get_region_centers(client) -> Dict[str, Dict]:
         h3_area_name as region,
         AVG(ST_Y(location)) as lat,
         AVG(ST_X(location)) as lng
-    FROM `bikeshare.service.app_accessibility`
+    FROM `service.app_accessibility`
     WHERE DATE(event_time) >= DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY)
         AND h3_area_name IS NOT NULL
         AND location IS NOT NULL
@@ -202,7 +202,7 @@ def get_district_ride_ratios(client) -> pd.DataFrame:
         COUNT(*) as ride_count,
         AVG(ST_Y(start_location)) as lat,
         AVG(ST_X(start_location)) as lng
-    FROM `bikeshare.service.rides`
+    FROM `service.rides`
     WHERE DATE(start_time) BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY)
         AND DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY)
         AND h3_start_area_name IS NOT NULL
@@ -438,7 +438,7 @@ def _fetch_lag_features(target_date: str) -> Dict[str, Dict]:
             DATE(start_time) as ride_date,
             EXTRACT(DAYOFWEEK FROM start_time) as dow,
             COUNT(*) as rides
-        FROM `bikeshare.service.rides`
+        FROM `service.rides`
         WHERE DATE(start_time) BETWEEN DATE_SUB('{target_date}', INTERVAL 28 DAY)
             AND DATE_SUB('{target_date}', INTERVAL 1 DAY)
             AND h3_start_area_name IS NOT NULL
@@ -1247,7 +1247,7 @@ def _render_hex_map(st, target_date_str: str):
             AVG(ST_Y(start_location)) as hex_lat,
             AVG(ST_X(start_location)) as hex_lng,
             COUNT(*) as actual_rides
-        FROM `bikeshare.service.rides`
+        FROM `service.rides`
         WHERE DATE(start_time) = '{target_date_str}'
             AND h3_start_area_name IS NOT NULL
             AND h3_start_district_name IS NOT NULL
@@ -1779,7 +1779,7 @@ def _render_live_hourly_tracking(st, target_date_str: str):
         SELECT
             EXTRACT(HOUR FROM start_time) as hour,
             COUNT(*) as actual_rides
-        FROM `bikeshare.service.rides`
+        FROM `service.rides`
         WHERE DATE(start_time) = '{target_date_str}'
         GROUP BY 1
         ORDER BY 1
@@ -1936,7 +1936,7 @@ def _render_live_hourly_tracking(st, target_date_str: str):
             SELECT
                 h3_start_district_name as district,
                 COUNT(*) as actual_rides
-            FROM `bikeshare.service.rides`
+            FROM `service.rides`
             WHERE DATE(start_time) = '{target_date_str}'
                 AND EXTRACT(HOUR FROM start_time) < {current_hour}
                 AND h3_start_district_name IS NOT NULL

@@ -273,7 +273,7 @@ class DistrictV2Hourly:
                 h3_start_district_name as district,
                 EXTRACT(HOUR FROM start_time) as hour,
                 COUNT(*) as rides
-            FROM `bikeshare.service.rides`
+            FROM `service.rides`
             WHERE DATE(start_time) BETWEEN '{start_date}' AND '{end_date}'
                 AND {day_filter}
                 AND h3_start_area_name IS NOT NULL
@@ -625,7 +625,7 @@ class DistrictV2Hourly:
             h3_start_district_name as district,
             EXTRACT(HOUR FROM start_time) as hour,
             COUNT(*) as actual_rides
-        FROM `bikeshare.service.rides`
+        FROM `service.rides`
         WHERE DATE(start_time) = '{target_date}'
             AND h3_start_area_name IS NOT NULL
             AND h3_start_district_name IS NOT NULL

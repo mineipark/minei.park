@@ -362,7 +362,7 @@ class ModelTuner:
             COUNT(*) as total_rides,
             COUNT(DISTINCT DATE(start_time)) as active_days,
             COUNT(*) * 1.0 / COUNT(DISTINCT DATE(start_time)) as avg_daily_rides
-        FROM `bikeshare.service.rides`
+        FROM `service.rides`
         WHERE DATE(start_time)
               BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY)
               AND DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY)

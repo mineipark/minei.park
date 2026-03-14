@@ -88,11 +88,11 @@ def load_staff_route(client, target_date: str, staff_name: str):
         s.name as staff_name,
         mc.name as center_name,
         COALESCE(m.h3_complete_area, m.h3_call_area) as region
-    FROM `bikeshare.service.maintenance_log` ms
-    JOIN `bikeshare.service.maintenance` m ON m.id = ms.maintenance_id
-    LEFT JOIN `bikeshare.service.staff` s_lookup ON s_lookup.user_id = ms.manager_id
-    JOIN `bikeshare.service.staff` s ON s.id = COALESCE(ms.staff_id, s_lookup.id)
-    JOIN `bikeshare.service.service_center` mc ON mc.id = s.center_id
+    FROM `service.maintenance_log` ms
+    JOIN `service.maintenance` m ON m.id = ms.maintenance_id
+    LEFT JOIN `service.staff` s_lookup ON s_lookup.user_id = ms.manager_id
+    JOIN `service.staff` s ON s.id = COALESCE(ms.staff_id, s_lookup.id)
+    JOIN `service.service_center` mc ON mc.id = s.center_id
     WHERE DATE(DATETIME(ms.created_at, 'Asia/Seoul')) = '{target_date}'
         AND s.name = '{staff_name}'
         AND m.status != 1
@@ -114,7 +114,7 @@ def load_bike_48h_revenue(client, bike_ids: list, task_date: str):
         r.bike_id,
         COUNT(*) as ride_count,
         SUM(r.fee) as total_revenue
-    FROM `bikeshare.service.rides` r
+    FROM `service.rides` r
     WHERE r.bike_id IN ({bike_ids_str})
         AND r.start_time >= DATETIME('{task_date}')
         AND r.start_time < DATETIME_ADD(DATETIME('{task_date}'), INTERVAL 48 HOUR)
@@ -136,7 +136,7 @@ def load_app_open_demand(client, target_date: str, region: str = None):
         h3_area_name as region,
         is_converted,
         is_accessible
-    FROM `bikeshare.service.app_accessibility`
+    FROM `service.app_accessibility`
     WHERE DATE(event_time) = '{target_date}'
         AND location IS NOT NULL
         {region_filter}
@@ -161,7 +161,7 @@ def load_historical_riding_hotspots(client, region: str, days_back: int = 30, ce
             ST_X(r.start_location) as lng,
             EXTRACT(HOUR FROM r.start_time) as ride_hour,
             r.fee
-        FROM `bikeshare.service.rides` r
+        FROM `service.rides` r
         WHERE r.start_time >= DATETIME_SUB(CURRENT_DATETIME('Asia/Seoul'), INTERVAL {days_back} DAY)
             AND r.fee > 0
             AND r.start_location IS NOT NULL
@@ -195,7 +195,7 @@ def load_unmet_demand_locations(client, target_date: str, region: str):
             EXTRACT(HOUR FROM event_time) as event_hour,
             is_accessible,
             is_converted
-        FROM `bikeshare.service.app_accessibility`
+        FROM `service.app_accessibility`
         WHERE DATE(event_time) = '{target_date}'
             AND location IS NOT NULL
             {region_filter}
@@ -222,8 +222,8 @@ def load_broken_bikes(client, target_date: str, region: str):
         m.vehicle_id as bike_id,
         ST_Y(COALESCE(m.location_complete, m.location_call)) as lat,
         ST_X(COALESCE(m.location_complete, m.location_call)) as lng
-    FROM `bikeshare.service.maintenance_log` ms
-    JOIN `bikeshare.service.maintenance` m ON m.id = ms.maintenance_id
+    FROM `service.maintenance_log` ms
+    JOIN `service.maintenance` m ON m.id = ms.maintenance_id
     WHERE DATE(DATETIME(ms.created_at, 'Asia/Seoul')) = '{target_date}'
         AND m.type = 2 AND ms.type = 30
         AND COALESCE(m.h3_complete_area, m.h3_call_area) LIKE '%{region}%'
@@ -263,7 +263,7 @@ def load_bike_snapshot_by_status(client, target_date: str, region: str, hours: l
             WHEN bike_status IN ('BAV') THEN 'available'           -- 가용
             ELSE 'other'
         END as status_category
-    FROM `bikeshare.service.bike_snapshot`
+    FROM `service.bike_snapshot`
     WHERE DATE(time) = '{target_date}'
         AND h3_area_name LIKE '%{region}%'
         AND hour IN ({hours_str})

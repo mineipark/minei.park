@@ -65,7 +65,7 @@ def get_riding_comparison_by_area(start_date: str, end_date: str) -> pd.DataFram
             h3_start_area_name AS area_name,
             COUNT(*) AS our_count,
             AVG(distance) AS our_avg_distance
-        FROM `bikeshare.service.rides`
+        FROM `service.rides`
         WHERE DATE(start_time) BETWEEN '{start_date}' AND '{end_date}'
             AND h3_start_area_name IS NOT NULL
         GROUP BY 1
@@ -75,7 +75,7 @@ def get_riding_comparison_by_area(start_date: str, end_date: str) -> pd.DataFram
             h3_start_area_name AS area_name,
             COUNT(*) AS comp_count,
             AVG(distance) AS comp_avg_distance
-        FROM `bikeshare.service.competitor_rides`
+        FROM `service.competitor_rides`
         WHERE date BETWEEN '{start_date}' AND '{end_date}'
             AND h3_start_area_name IS NOT NULL
         GROUP BY 1
@@ -107,7 +107,7 @@ def get_riding_with_geo(start_date: str, end_date: str) -> pd.DataFrame:
             AVG(distance) AS our_avg_distance,
             AVG(ST_Y(start_location)) AS lat,
             AVG(ST_X(start_location)) AS lng
-        FROM `bikeshare.service.rides`
+        FROM `service.rides`
         WHERE DATE(start_time) BETWEEN '{start_date}' AND '{end_date}'
             AND h3_start_area_name IS NOT NULL
             AND start_location IS NOT NULL
@@ -118,7 +118,7 @@ def get_riding_with_geo(start_date: str, end_date: str) -> pd.DataFrame:
             h3_start_area_name AS area_name,
             COUNT(*) AS comp_count,
             AVG(distance) AS comp_avg_distance
-        FROM `bikeshare.service.competitor_rides`
+        FROM `service.competitor_rides`
         WHERE date BETWEEN '{start_date}' AND '{end_date}'
             AND h3_start_area_name IS NOT NULL
         GROUP BY 1
@@ -149,7 +149,7 @@ def get_hourly_pattern_comparison(start_date: str, end_date: str) -> pd.DataFram
         SELECT
             EXTRACT(HOUR FROM start_time) AS hour,
             COUNT(*) AS our_count
-        FROM `bikeshare.service.rides`
+        FROM `service.rides`
         WHERE DATE(start_time) BETWEEN '{start_date}' AND '{end_date}'
         GROUP BY 1
     ),
@@ -157,7 +157,7 @@ def get_hourly_pattern_comparison(start_date: str, end_date: str) -> pd.DataFram
         SELECT
             hour,
             COUNT(*) AS comp_count
-        FROM `bikeshare.service.competitor_rides`
+        FROM `service.competitor_rides`
         WHERE date BETWEEN '{start_date}' AND '{end_date}'
         GROUP BY 1
     )
@@ -180,7 +180,7 @@ def get_daily_trend_comparison(start_date: str, end_date: str) -> pd.DataFrame:
         SELECT
             DATE(start_time) AS date,
             COUNT(*) AS our_count
-        FROM `bikeshare.service.rides`
+        FROM `service.rides`
         WHERE DATE(start_time) BETWEEN '{start_date}' AND '{end_date}'
         GROUP BY 1
     ),
@@ -188,7 +188,7 @@ def get_daily_trend_comparison(start_date: str, end_date: str) -> pd.DataFrame:
         SELECT
             date,
             COUNT(*) AS comp_count
-        FROM `bikeshare.service.competitor_rides`
+        FROM `service.competitor_rides`
         WHERE date BETWEEN '{start_date}' AND '{end_date}'
         GROUP BY 1
     )
@@ -212,7 +212,7 @@ def get_area_comparison(start_date: str, end_date: str) -> pd.DataFrame:
             h3_start_area_name AS area_name,
             COUNT(*) AS our_count,
             AVG(distance) AS our_avg_distance
-        FROM `bikeshare.service.rides`
+        FROM `service.rides`
         WHERE DATE(start_time) BETWEEN '{start_date}' AND '{end_date}'
             AND h3_start_area_name IS NOT NULL
         GROUP BY 1
@@ -222,7 +222,7 @@ def get_area_comparison(start_date: str, end_date: str) -> pd.DataFrame:
             h3_start_area_name AS area_name,
             COUNT(*) AS comp_count,
             AVG(distance) AS comp_avg_distance
-        FROM `bikeshare.service.competitor_rides`
+        FROM `service.competitor_rides`
         WHERE date BETWEEN '{start_date}' AND '{end_date}'
             AND h3_start_area_name IS NOT NULL
         GROUP BY 1
@@ -250,7 +250,7 @@ def get_competitor_breakdown(start_date: str, end_date: str) -> pd.DataFrame:
         COUNT(*) AS ride_count,
         AVG(distance) AS avg_distance,
         COUNT(DISTINCT h3_start_area_name) AS area_count
-    FROM `bikeshare.service.competitor_rides`
+    FROM `service.competitor_rides`
     WHERE date BETWEEN '{start_date}' AND '{end_date}'
     GROUP BY 1
     ORDER BY ride_count DESC
@@ -263,8 +263,8 @@ def get_summary_data(start_date: str, end_date: str) -> dict:
     """요약 데이터만 빠르게 조회"""
     query = f"""
     SELECT
-        (SELECT COUNT(*) FROM `bikeshare.service.rides` WHERE DATE(start_time) BETWEEN '{start_date}' AND '{end_date}') AS our_total,
-        (SELECT COUNT(*) FROM `bikeshare.service.competitor_rides` WHERE date BETWEEN '{start_date}' AND '{end_date}') AS comp_total
+        (SELECT COUNT(*) FROM `service.rides` WHERE DATE(start_time) BETWEEN '{start_date}' AND '{end_date}') AS our_total,
+        (SELECT COUNT(*) FROM `service.competitor_rides` WHERE date BETWEEN '{start_date}' AND '{end_date}') AS comp_total
     """
     return run_query(query)
 

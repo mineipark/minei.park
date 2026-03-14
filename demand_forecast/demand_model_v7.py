@@ -159,7 +159,7 @@ class DemandForecastModelV7:
 
     def _load_holidays(self):
         if self.holidays is None:
-            query = "SELECT date FROM `bikeshare.reference.public_holidays`"
+            query = "SELECT date FROM `reference.public_holidays`"
             self.holidays = set(self.client.query(query).to_dataframe()['date'].tolist())
             # BigQuery에 누락된 공휴일 보충 (설, 추석 등 음력 기반)
             from korean_holidays import ADDITIONAL_HOLIDAYS
@@ -178,9 +178,9 @@ class DemandForecastModelV7:
             COALESCE(c.name, 'unknown') as center_name,
             r.h3_start_area_name as region,
             COUNT(*) as ride_count
-        FROM `bikeshare.service.rides` r
-        LEFT JOIN `bikeshare.service.geo_area` a ON r.h3_start_area_name = a.name
-        LEFT JOIN `bikeshare.service.service_center` c ON a.center_id = c.id
+        FROM `service.rides` r
+        LEFT JOIN `service.geo_area` a ON r.h3_start_area_name = a.name
+        LEFT JOIN `service.service_center` c ON a.center_id = c.id
         WHERE r.start_time BETWEEN '{start_date}' AND '{end_date} 23:59:59'
             AND r.h3_start_area_name IN ({regions_str})
         GROUP BY 1, 2, 3, 4, 5

@@ -169,7 +169,7 @@ class DistrictV2Hex:
                 AVG(ST_Y(start_location)) as hex_lat,
                 AVG(ST_X(start_location)) as hex_lng,
                 COUNT(*) as rides
-            FROM `bikeshare.service.rides`
+            FROM `service.rides`
             WHERE DATE(start_time) BETWEEN '{start_date}' AND '{end_date}'
                 AND {day_filter}
                 AND h3_start_area_name IS NOT NULL
@@ -223,7 +223,7 @@ class DistrictV2Hex:
                     AVG(ST_Y(start_location)) as hex_lat,
                     AVG(ST_X(start_location)) as hex_lng,
                     COUNT(*) as rides
-                FROM `bikeshare.service.rides`
+                FROM `service.rides`
                 WHERE DATE(start_time) BETWEEN '{start_date}' AND '{end_date}'
                     AND h3_start_area_name IS NOT NULL
                     AND h3_start_district_name IS NOT NULL
@@ -559,7 +559,7 @@ class DistrictV2Hex:
                 {H3_RESOLUTION}
             ) as h3_index,
             COUNT(*) as actual_rides
-        FROM `bikeshare.service.rides`
+        FROM `service.rides`
         WHERE DATE(start_time) = '{target_date}'
             AND h3_start_area_name IS NOT NULL
             AND h3_start_district_name IS NOT NULL

@@ -119,7 +119,7 @@ class SupplyDemandAnalyzer:
             AVG(leftover) as avg_battery,
             AVG(CAST(JSON_VALUE(location, '$.coordinates[1]') AS FLOAT64)) as lat,
             AVG(CAST(JSON_VALUE(location, '$.coordinates[0]') AS FLOAT64)) as lng
-        FROM `bikeshare.service.bike_snapshot`
+        FROM `service.bike_snapshot`
         WHERE {date_filter}
             AND EXTRACT(HOUR FROM time) = {snapshot_hour}
             AND h3_area_name IS NOT NULL
@@ -190,7 +190,7 @@ class SupplyDemandAnalyzer:
             AVG(leftover) as avg_battery,
             AVG(CAST(JSON_VALUE(location, '$.coordinates[1]') AS FLOAT64)) as lat,
             AVG(CAST(JSON_VALUE(location, '$.coordinates[0]') AS FLOAT64)) as lng
-        FROM `bikeshare.service.bike_snapshot`
+        FROM `service.bike_snapshot`
         WHERE {date_filter}
             AND EXTRACT(HOUR FROM time) IN ({hours_str})
             AND h3_area_name IS NOT NULL
@@ -248,8 +248,8 @@ class SupplyDemandAnalyzer:
             a.name as region,
             c.name as center_name,
             c.id as center_id
-        FROM `bikeshare.service.geo_area` a
-        JOIN `bikeshare.service.service_center` c ON a.center_id = c.id
+        FROM `service.geo_area` a
+        JOIN `service.service_center` c ON a.center_id = c.id
         WHERE a.name IS NOT NULL
         """
         df = self.client.query(query).to_dataframe()

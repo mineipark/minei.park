@@ -28,7 +28,7 @@ WITH weekly_hex AS (
         udf.geo_to_h3(ST_Y(start_location), ST_X(start_location), 9) as h3_index,
         DATE_TRUNC(DATE(start_time), WEEK(MONDAY)) as week_start,
         COUNT(*) as rides
-    FROM `bikeshare.service.rides`
+    FROM `service.rides`
     WHERE DATE(start_time) BETWEEN '2026-01-26' AND '2026-02-22'
         AND bike_type = 1
         AND h3_start_area_name IS NOT NULL
@@ -107,7 +107,7 @@ WITH weekly_window AS (
             ELSE 'night'
         END as time_window,
         COUNT(*) as rides
-    FROM `bikeshare.service.rides`
+    FROM `service.rides`
     WHERE DATE(start_time) BETWEEN '2026-01-26' AND '2026-02-22'
         AND bike_type = 1
         AND h3_start_district_name IS NOT NULL

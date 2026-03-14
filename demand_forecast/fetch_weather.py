@@ -117,7 +117,7 @@ def fetch_all_stations(start_date: str, end_date: str) -> pd.DataFrame:
     return pd.DataFrame()
 
 
-def save_to_bigquery(df: pd.DataFrame, table_id: str = "bikeshare.service.weather"):
+def save_to_bigquery(df: pd.DataFrame, table_id: str = "service.weather"):
     """BigQuery에 데이터 저장"""
     try:
         from google.cloud import bigquery

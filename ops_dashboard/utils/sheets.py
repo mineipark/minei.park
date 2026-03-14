@@ -9,23 +9,22 @@ import pandas as pd
 from datetime import datetime
 import os
 
-# 서비스 계정 JSON 경로
-KEY_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "key.json")
+# 인증 설정 (환경변수에서 로드)
+CREDENTIALS_PATH = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
 
-# Sheets 권한 scopes
 SCOPES = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive",
 ]
 
-# Google Sheets ID
-SEARCH_STATUS_SHEET_ID = "YOUR_GOOGLE_SHEET_ID"
+# Google Sheets ID (환경변수에서 로드)
+SEARCH_STATUS_SHEET_ID = os.environ.get("SEARCH_STATUS_SHEET_ID")
 
 
 def get_sheets_client():
     """Google Sheets 클라이언트 생성"""
     credentials = service_account.Credentials.from_service_account_file(
-        KEY_PATH, scopes=SCOPES
+        CREDENTIALS_PATH, scopes=SCOPES
     )
     return gspread.authorize(credentials)
 

@@ -60,25 +60,25 @@ def load_missing_bikes() -> pd.DataFrame:
     WITH
     gps_active AS (
       SELECT DISTINCT device_id
-      FROM `bikeshare-project.service.PRD`
+      FROM `service.PRD`
       WHERE created_at >= TIMESTAMP(DATE_SUB(CURRENT_DATE('Asia/Seoul'), INTERVAL 10 DAY))
         AND DATETIME_DIFF(CURRENT_DATETIME('Asia/Seoul'), CAST(created_at AS DATETIME), HOUR) <= 168
     ),
     riding_active AS (
       SELECT DISTINCT bike_id
-      FROM `bikeshare.service.rides`
+      FROM `service.rides`
       WHERE DATE(started_at, 'Asia/Seoul') >= DATE_SUB(CURRENT_DATE('Asia/Seoul'), INTERVAL 60 DAY)
         AND status = 10
     ),
     maintenance_active AS (
       SELECT DISTINCT vehicle_id AS bike_id
-      FROM `bikeshare-project.service.maintenance`
+      FROM `service.maintenance`
       WHERE created_at >= TIMESTAMP(DATE_SUB(CURRENT_DATE('Asia/Seoul'), INTERVAL 60 DAY))
         AND status IN (2, 3)
     ),
     field_bikes AS (
       SELECT b.id, b.sn, b.device_id, b.status, b.vendor, b.leftover, b.area
-      FROM `bikeshare.service.bike` b
+      FROM `service.bike` b
       WHERE b.is_active = TRUE AND b.is_usable = TRUE AND b.in_testing = FALSE
         AND b.vendor IN (3, 5) AND b.status NOT IN (2, 3)
     )
@@ -87,7 +87,7 @@ def load_missing_bikes() -> pd.DataFrame:
     LEFT JOIN gps_active ga ON fb.device_id = ga.device_id
     LEFT JOIN riding_active ra ON fb.id = ra.bike_id
     LEFT JOIN maintenance_active ma ON fb.id = ma.bike_id
-    LEFT JOIN `bikeshare.management.region` AS re ON re.area_cd = fb.area
+    LEFT JOIN `management.region` AS re ON re.area_cd = fb.area
     WHERE ga.device_id IS NULL AND ra.bike_id IS NULL AND ma.bike_id IS NULL
       AND center_name IN ({centers_str})
     ORDER BY fb.area, fb.sn
@@ -102,9 +102,9 @@ def load_interactor_released_bikes() -> pd.DataFrame:
 
     query = f"""
     SELECT b.sn, r.area_name, r.center_name
-    FROM `bikeshare.service.bike` AS b
-    LEFT JOIN `bikeshare.service.bike` AS bi ON b.id = bi.id
-    LEFT JOIN `bikeshare.management.region` AS r ON r.area_cd = b.bike_area
+    FROM `service.bike` AS b
+    LEFT JOIN `service.bike` AS bi ON b.id = bi.id
+    LEFT JOIN `management.region` AS r ON r.area_cd = b.bike_area
     WHERE bike_status IN ('BAV', 'LAV', 'LNB', 'BNB')
       AND mac_id = '-'
       AND in_testing = false
@@ -132,11 +132,11 @@ def load_repeat_issues() -> pd.DataFrame:
         ms.staff_id,
         s.name AS staff_name,
         mc.name AS center_name
-      FROM `bikeshare.service.maintenance` m
-      JOIN `bikeshare.service.maintenance_log` ms
+      FROM `service.maintenance` m
+      JOIN `service.maintenance_log` ms
         ON m.id = ms.maintenance_id AND ms.type = 20
-      LEFT JOIN `bikeshare.service.staff` s ON ms.staff_id = s.id
-      LEFT JOIN `bikeshare.service.service_center` mc ON s.center_id = mc.id
+      LEFT JOIN `service.staff` s ON ms.staff_id = s.id
+      LEFT JOIN `service.service_center` mc ON s.center_id = mc.id
       WHERE m.type = 2 AND m.status = 3
         AND m.completed_time >= DATETIME_SUB(CURRENT_DATETIME('Asia/Seoul'), INTERVAL 30 DAY)
     ),
@@ -154,7 +154,7 @@ def load_repeat_issues() -> pd.DataFrame:
           ORDER BY m.created_time ASC
         ) AS rn
       FROM onsite_complete o
-      JOIN `bikeshare.service.maintenance` m
+      JOIN `service.maintenance` m
         ON o.bike_id = m.vehicle_id
         AND m.created_time > o.completed_time
         AND m.type = 2
@@ -176,7 +176,7 @@ def load_repeat_issues() -> pd.DataFrame:
         DATETIME_DIFF(nb.next_broken_time, nb.completed_time, MINUTE) AS lead_time_minutes,
         (
           SELECT COUNT(*)
-          FROM `bikeshare.service.rides` r
+          FROM `service.rides` r
           WHERE r.bike_id = nb.bike_id
             AND r.start_time > nb.completed_time
             AND r.start_time < nb.next_broken_time
@@ -188,7 +188,7 @@ def load_repeat_issues() -> pd.DataFrame:
     SELECT
       maintenance_id,
       bike_id,
-      `bikeshare-project.udf`.id_to_sn(bike_id) AS bike_sn,
+      `udf`.id_to_sn(bike_id) AS bike_sn,
       center_name,
       staff_name,
       completed_time,

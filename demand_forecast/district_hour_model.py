@@ -267,7 +267,7 @@ class DistrictHourPredictor:
             COUNT(*) as ride_count,
             AVG(ST_Y(start_location)) as lat,
             AVG(ST_X(start_location)) as lng
-        FROM `bikeshare.service.rides`
+        FROM `service.rides`
         WHERE {date_filter}
             AND h3_start_area_name IS NOT NULL
             AND h3_start_district_name IS NOT NULL
@@ -343,7 +343,7 @@ class DistrictHourPredictor:
                 h3_district_name as district,
                 EXTRACT(HOUR FROM event_time) as hour,
                 COUNT(*) as app_opens
-            FROM `bikeshare.service.app_accessibility`
+            FROM `service.app_accessibility`
             WHERE DATE(event_time) BETWEEN '{start_date}' AND '{end_date}'
                 AND {day_filter}
                 AND h3_area_name IS NOT NULL
@@ -897,7 +897,7 @@ class DistrictHourPredictor:
             h3_start_district_name as district,
             EXTRACT(HOUR FROM start_time) as hour,
             COUNT(*) as actual_rides
-        FROM `bikeshare.service.rides`
+        FROM `service.rides`
         WHERE DATE(start_time) = '{target_date}'
             AND h3_start_area_name IS NOT NULL
             AND h3_start_district_name IS NOT NULL

@@ -403,9 +403,9 @@ def update_actual_data():
         r.h3_start_area_name as region,
         COALESCE(c.name, 'unknown') as center_name,
         COUNT(*) as ride_count
-    FROM `bikeshare.service.rides` r
-    LEFT JOIN `bikeshare.service.geo_area` a ON r.h3_start_area_name = a.name
-    LEFT JOIN `bikeshare.service.service_center` c ON a.center_id = c.id
+    FROM `service.rides` r
+    LEFT JOIN `service.geo_area` a ON r.h3_start_area_name = a.name
+    LEFT JOIN `service.service_center` c ON a.center_id = c.id
     WHERE DATE(r.start_time) IN ('{dates_str}')
         AND r.h3_start_area_name IN ({regions_str})
     GROUP BY ride_date, region, center_name

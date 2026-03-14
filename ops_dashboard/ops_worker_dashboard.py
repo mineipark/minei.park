@@ -33,13 +33,13 @@ def hide_sidebar_pages(labels: list[str]):
 # -----------------------------------------------------------
 
 USER_DB = {
-    # Sample users (passwords should be hashed in production)
+    # Passwords loaded from environment variables (required)
     "demo_user": {
-        "password": os.environ.get("DEMO_PASSWORD", "demo1234"),
+        "password": os.environ["DEMO_PASSWORD"],
         "centers": ["Center_North"]
     },
     "admin": {
-        "password": os.environ.get("ADMIN_PASSWORD", "admin1234"),
+        "password": os.environ["ADMIN_PASSWORD"],
         "centers": ["all"]
     },
 }

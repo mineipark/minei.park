@@ -21,8 +21,7 @@ from google.cloud import bigquery
 import requests
 
 # ── 설정 ──────────────────────────────────────────────
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-CREDENTIALS_PATH = os.path.join(SCRIPT_DIR, 'credentials', 'service-account.json')
+CREDENTIALS_PATH = os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
 
 SLACK_BOT_TOKEN = os.environ.get('SLACK_BOT_TOKEN', '')
 SLACK_CHANNEL = os.environ.get('BIKE_STATS_SLACK_CHANNEL', 'YOUR_SLACK_CHANNEL_ID')
@@ -62,7 +61,7 @@ def query_bike_stats(client, start_date: str, end_date: str):
         END AS type,
         COUNT(sn) / 24 AS all_bike,
         COUNTIF(bike_status IN ('BAV', 'BNB', 'BRD', 'LRD')) / 24 AS av_bike
-    FROM `bikeshare.service.bike_snapshot` AS bs
+    FROM `service.bike_snapshot` AS bs
     WHERE date BETWEEN @start_date AND @end_date
         AND is_active = TRUE
         AND in_testing = FALSE
@@ -85,7 +84,7 @@ def get_bq_client():
     credentials = service_account.Credentials.from_service_account_file(
         CREDENTIALS_PATH, scopes=SCOPES
     )
-    return bigquery.Client(credentials=credentials, project='bikeshare-project')
+    return bigquery.Client(credentials=credentials, project=os.environ.get('GCP_PROJECT_ID'))
 
 
 def query_type_changes(client, start_date: str, end_date: str):
@@ -102,7 +101,7 @@ def query_type_changes(client, start_date: str, end_date: str):
                 WHEN franchise_provide_type = 30 THEN '위탁'
                 ELSE '기타'
             END AS type
-        FROM `bikeshare.service.bike_snapshot`
+        FROM `service.bike_snapshot`
         WHERE date BETWEEN @start_date AND @end_date
             AND is_active = TRUE
             AND in_testing = FALSE
