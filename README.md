@@ -26,7 +26,7 @@
 | # | 프로젝트 | 한줄 요약 | 핵심 기술 |
 |:-:|---------|----------|----------|
 | 1 | [**ML 기반 수요 예측 시스템**](./projects/demand-forecast/) | 2-Model Ensemble로 일별 수요 예측, MAPE 11% | LightGBM · BigQuery · GitHub Actions |
-| 2 | [**현장 작업 ROI & DiD 실험**](./projects/experiment-did-roi/) | 현장 작업 효과를 ROI·DiD로 정량 검증 | DiD · ROI Analysis · BigQuery |
+| 2 | [**현장 작업 ROI & DiD 실험**](./projects/experiment-did-roi/) | 현장 작업 효과를 ROI·DiD로 정량 검증 | DiD / ROI Analysis · BigQuery |
 | 3 | [**운영팀 Task 보드**](./projects/task-board/) | 5개 뷰 통합 프로젝트 매니지먼트 웹앱 | Firebase · Firestore · JS |
 | 4 | [**기술소견서 & 자산 리포트 자동화**](./projects/automation-report/) | 사고 접수→소견서 자동 생성, 월간 자산 리포트 | Slack Bot · Apps Script · BigQuery |
 | 5 | [**자동화 카탈로그**](./projects/automation-catalog/) | 19개 자동화 도구 체계적 관리 | Google Sheets · Process Mgmt |
@@ -51,9 +51,9 @@ flowchart TB
         BQ[(BigQuery)]
     end
 
-    subgraph AI · ML
+    subgraph AI_ML
         FORECAST[수요 예측 모델<br>LightGBM Ensemble]
-        ANALYSIS[실험 분석<br>DiD · ROI]
+        ANALYSIS[실험 분석<br>DiD / ROI]
     end
 
     subgraph 자동화 파이프라인
@@ -63,8 +63,8 @@ flowchart TB
     end
 
     subgraph 아웃풋
-        SHEETS[Google Sheets<br>예측 결과 · 분석 데이터]
-        SLACK[Slack 봇<br>알림 · 리포트]
+        SHEETS[Google Sheets<br>예측 결과 / 분석 데이터]
+        SLACK[Slack 봇<br>알림 / 리포트]
         DASH[Streamlit 대시보드<br>실시간 모니터링]
         TASK[Task 보드<br>팀 업무 관리]
     end
