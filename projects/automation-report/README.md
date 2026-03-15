@@ -75,10 +75,11 @@ flowchart LR
 
 ## Screenshot
 
-<!-- 마스킹 후 아래 경로에 이미지를 추가하세요 -->
-<!-- ![기술소견서 Slack 알림](../../assets/tech_report_slack.png) -->
-<!-- ![기술소견서 Google Sheets](../../assets/tech_report_sheet.png) -->
-<!-- ![월간 자산 리포트](../../assets/monthly_asset_report.png) -->
+### 월간 자산 리포트 - Slack 자동 발송
+![월간 자산 리포트](../../assets/monthly_asset_report.png)
+
+### 기술소견서 - 사고기기 접수 Slack 자동 알림
+![기술소견서 Slack 알림](../../assets/tech_report_slack.png)
 
 ## Tech Stack
 

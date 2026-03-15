@@ -102,8 +102,8 @@ flowchart TB
 
 ## Screenshot
 
-<!-- 마스킹 후 아래 경로에 이미지를 추가하세요 -->
-<!-- ![수요 예측 Slack 리포트](../../assets/demand_forecast_slack_report.png) -->
+### 일일 예측 리포트 - Slack 자동 발송
+![일일 예측 리포트](../../assets/demand_forecast_slack_report.png)
 
 ## Tech Stack
 

@@ -74,8 +74,14 @@ flowchart TB
 
 ## Screenshot
 
-<!-- 마스킹 후 아래 경로에 이미지를 추가하세요 -->
+### 관리 페이지 - 실종 위기 기기
 <!-- ![관리 페이지 - 실종 위기 기기](../../assets/ops_dashboard_admin.png) -->
+
+### 센터별 현장관리 대시보드 - 업무량 & 근무 현황
+![센터별 대시보드](../../assets/ops_dashboard_center.png)
+
+### 직원별 작업 동선 - GPS 기반 Folium 지도
+![직원별 작업 동선](../../assets/ops_dashboard_route.png)
 
 ## Tech Stack
 
