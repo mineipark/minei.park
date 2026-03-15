@@ -118,7 +118,7 @@ EBITDA = 매출 - 비용
 | **ML** | LightGBM, scikit-learn, SciPy |
 | **대시보드** | Streamlit, Plotly, Folium |
 | **자동화** | Slack Bolt, Apps Script, GitHub Actions |
-| **AI** | Claude API (Claude Code, Codex) |
+| **AI** | Claude API (Claude Code) |
 | **공간 분석** | H3 Hexagon, Shapely, GeoJSON |
 | **인프라** | GitHub Actions (CI/CD), Firebase |
 

@@ -68,7 +68,7 @@ flowchart LR
     subgraph 배포 & 모니터링
         GS[Google Sheets<br>예측 결과 동기화]
         SL[Slack 일일 리포트<br>MAPE·편향·추세]
-        GA[GitHub Actions<br>매일 09:30 자동 실행]
+        GA[GitHub Actions<br>매일 09:00 자동 실행]
     end
 
     BQ --> FE

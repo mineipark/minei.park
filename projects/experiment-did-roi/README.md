@@ -104,12 +104,6 @@ flowchart TB
 - DiD를 통해 동선 개선의 순수 효과를 인과적으로 측정
 - **실험 기반 의사결정 체계** 구축: 시범 운영 → 효과 검증 → 전사 확대 프레임워크 정립
 
-## Screenshot
-
-<!-- 마스킹 후 아래 경로에 이미지를 추가하세요 -->
-<!-- ![ROI 분석 시트](../../assets/roi_analysis.png) -->
-<!-- ![DiD 실험 분석](../../assets/did_experiment.png) -->
-
 ## Tech Stack
 
 `BigQuery` `Google Sheets` `DiD (Difference-in-Differences)` `ROI Analysis` `A/B Test Design`
