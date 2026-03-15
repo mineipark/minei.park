@@ -30,6 +30,7 @@
 | 3 | [**운영팀 Task 보드**](./projects/task-board/) | 5개 뷰 통합 프로젝트 매니지먼트 웹앱 | Firebase · Firestore · JS |
 | 4 | [**기술소견서 & 자산 리포트 자동화**](./projects/automation-report/) | 사고 접수→소견서 자동 생성, 월간 자산 리포트 | Slack Bot · Apps Script · BigQuery |
 | 5 | [**자동화 카탈로그**](./projects/automation-catalog/) | 19개 자동화 도구 체계적 관리 | Google Sheets · Process Mgmt |
+| 6 | [**운영 대시보드**](./projects/ops-dashboard/) | 7개 페이지 멀티페이지 운영 모니터링 | Streamlit · BigQuery · Folium |
 
 > 각 프로젝트를 클릭하면 **Problem → Approach → Architecture → Results** 상세 페이지로 이동합니다.
 
