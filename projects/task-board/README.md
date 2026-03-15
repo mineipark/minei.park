@@ -63,11 +63,11 @@ flowchart TB
 
 ## Screenshot
 
-<!-- 마스킹 후 아래 경로에 이미지를 추가하세요 -->
-<!-- ![Task 보드 대시보드](../../assets/task_board_dashboard.png) -->
-<!-- ![Task 보드 칸반](../../assets/task_board_kanban.png) -->
-<!-- ![Task 보드 개인 페이지](../../assets/task_board_personal.png) -->
-<!-- ![Task 보드 Weekly](../../assets/task_board_weekly.png) -->
+### 백로그
+![Task 보드 백로그](../../assets/task_board_backlog.png)
+
+### 개인 페이지 - AI 코칭 & D-day
+![Task 보드 개인 페이지](../../assets/task_board_personal.png)
 
 ## Tech Stack
 
