@@ -42,7 +42,7 @@ GPS 7일 미송신 + 60일 라이딩 없음 + 60일 정비 없음
 ```mermaid
 flowchart TB
     subgraph 데이터 소스
-        BQ[(BigQuery<br>rides / bike_snapshot<br>service_center)]
+        BQ[(BigQuery<br>rides / device_snapshot (가칭)<br>service_center)]
         GS[Google Sheets<br>운영 메타데이터]
     end
 

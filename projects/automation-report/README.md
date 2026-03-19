@@ -36,7 +36,7 @@ Google Sheets 기술소견서 템플릿 자동 생성
 ```
 매월 1일 자동 실행 (GitHub Actions)
   ↓
-BigQuery bike_snapshot 테이블 → 일별 스냅샷 월평균 집계
+BigQuery device_snapshot (가칭) 테이블 → 일별 스냅샷 월평균 집계
   ↓
 보유 대수 (직영 / 가맹: 일시불·임대·위탁)
 가용 대수 + 가용률 (%)
@@ -56,7 +56,7 @@ flowchart LR
     end
 
     subgraph 월간 자산 리포트
-        BQ[(BigQuery<br>bike_snapshot)] --> AGG[월평균 집계<br>보유·가용·유형변경]
+        BQ[(BigQuery<br>device_snapshot (가칭))] --> AGG[월평균 집계<br>보유·가용·유형변경]
         AGG --> BOT2[pmo_ops 봇<br>Slack 리포트]
         GA[GitHub Actions<br>매월 1일 자동 실행] -.-> AGG
     end

@@ -1,6 +1,5 @@
 # 박민이 | AI 기반 운영 기획 포트폴리오
 
-> 모빌리티 서비스 런칭부터 약 5년간, 현장의 문제를 데이터로 정의하고 AI/ML로 해결해온 운영 기획자입니다.
 
 ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![BigQuery](https://img.shields.io/badge/BigQuery-669DF6?style=flat-square&logo=googlebigquery&logoColor=white)

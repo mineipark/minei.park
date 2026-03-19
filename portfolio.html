@@ -121,7 +121,6 @@ li { margin-bottom: 3px; }
 <div class="cover">
     <h1>박민이</h1>
     <p class="subtitle">AI 기반 운영 기획 포트폴리오</p>
-    <p class="desc">모빌리티 서비스 런칭부터 약 5년간, 현장의 문제를 데이터로 정의하고 AI/ML로 해결해온 운영 기획자</p>
     <div class="divider"></div>
 </div>
 
@@ -298,7 +297,7 @@ li { margin-bottom: 3px; }
 
     <h3>Approach</h3>
     <p><strong>[기술소견서]</strong> CS 사고 접수 → pmo_ops봇 Slack 알림 → Google Sheets 소견서 자동 생성 → 담당자 자동 배정</p>
-    <p><strong>[월간 자산 리포트]</strong> 매월 1일 GitHub Actions 자동 실행 → BigQuery bike_snapshot 월평균 집계 → Slack Block Kit 자동 발송</p>
+    <p><strong>[월간 자산 리포트]</strong> 매월 1일 GitHub Actions 자동 실행 → BigQuery device_snapshot (가칭) 월평균 집계 → Slack Block Kit 자동 발송</p>
 
     <h3>Results</h3>
     <ul>
@@ -410,7 +409,7 @@ li { margin-bottom: 3px; }
     <h3>Problem</h3>
     <ul>
         <li>BigQuery 예약쿼리 실패, 테이블 freshness 지연 등 <strong>파이프라인 장애를 수동으로 발견</strong></li>
-        <li>EC2에서 돌아가는 Inspector(billing_stack, bike_snapshot 등)가 죽어도 <strong>알 수 없음</strong></li>
+        <li>EC2에서 돌아가는 Inspector(billing_sync, device_snapshot (가칭) 등)가 죽어도 <strong>알 수 없음</strong></li>
         <li>스키마 변경(컬럼 추가/삭제/타입변경)이 <strong>하위 테이블에 연쇄 영향</strong>을 미쳐도 사전 감지 불가</li>
         <li>장애 발생 시 원인 추적에 시간 소요 → 데이터 기반 의사결정 지연</li>
     </ul>
@@ -421,10 +420,10 @@ li { margin-bottom: 3px; }
         <tbody>
             <tr><td>Trigger Layer</td><td>data_main (2~3시간), data_all (매일 09:00), /data (온디맨드)</td><td>감시 주기 및 실행 트리거</td></tr>
             <tr><td>Scan Engine</td><td>scan_table_meta, scan_scheduled_queries, scan_ec2_cron, scan_views, scan_schemas</td><td>5개 스캔 모듈로 파이프라인 상태 점검</td></tr>
-            <tr><td>data_main Scope</td><td>Critical 노드 5개 + 핵심 예약쿼리 ~15개</td><td>긴급 감시 (tf_billing, business_riding 등)</td></tr>
+            <tr><td>data_main Scope</td><td>Critical 노드 5개 + 핵심 예약쿼리 ~15개</td><td>긴급 감시 (billing_fact, riding_summary (가칭) 등)</td></tr>
             <tr><td>data_all Scope</td><td>전체 387개 테이블 + 56개 예약쿼리</td><td>종합 점검 (스키마 변경, 의존성 체인, 레거시 감지)</td></tr>
-            <tr><td>EC2 Inspectors</td><td>billing_stack, bike_snapshot, bq_duplicated 등 5개</td><td>데이터 정합성 점검 (Data이 생존 감시)</td></tr>
-            <tr><td>Slack Output</td><td>#pmo_dt_데이터분석</td><td>이슈 시 즉시 알림 + 매일 아침 리포트</td></tr>
+            <tr><td>EC2 Inspectors</td><td>billing_sync, device_snapshot, dedup_checker (가칭) 등 5개</td><td>데이터 정합성 점검 (Data가 생존 감시)</td></tr>
+            <tr><td>Slack Output</td><td>#data_ops (가칭)</td><td>이슈 시 즉시 알림 + 매일 아침 리포트</td></tr>
         </tbody>
     </table>
 

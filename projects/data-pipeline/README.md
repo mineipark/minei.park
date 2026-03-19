@@ -7,7 +7,7 @@
 ## Problem
 
 - BigQuery 예약쿼리 실패, 테이블 freshness 지연 등 **파이프라인 장애를 수동으로 발견**
-- EC2에서 돌아가는 Inspector(billing_stack, bike_snapshot 등)가 죽어도 **알 수 없음**
+- EC2에서 돌아가는 Inspector(billing_sync (가칭), device_snapshot (가칭) 등)가 죽어도 **알 수 없음**
 - 스키마 변경(컬럼 추가/삭제/타입변경)이 **하위 테이블에 연쇄 영향**을 미쳐도 사전 감지 불가
 - 장애 발생 시 원인 추적에 시간 소요 → 데이터 기반 의사결정 지연
 
@@ -32,9 +32,9 @@ flowchart TB
     end
 
     subgraph Main["3. data_main Scope — 긴급 감시"]
-        CRITICAL["Critical 노드 5개<br>tf_billing, business_riding<br>tf_purchase_table, billing_stack<br>tf_bike_snapshot"]
-        QUERIES["핵심 예약쿼리 ~15개<br>매시간: business_riding, tf_riding<br>매일: daily_bike, daily_sales_raw"]
-        SYNC["원천 동기화<br>riding, billing<br>bike_snapshot, maintenance"]
+        CRITICAL["Critical 노드 5개<br>billing_fact, riding_summary (가칭)<br>purchase_fact, billing_sync<br>device_snapshot"]
+        QUERIES["핵심 예약쿼리 ~15개<br>매시간: riding_summary, riding_fact (가칭)<br>매일: daily_device, daily_sales (가칭)"]
+        SYNC["원천 동기화<br>riding, billing (가칭)<br>device_snapshot, maintenance"]
         HEALTH["Inspector 헬스<br>EC2 cron 정상 실행 확인"]
     end
 
@@ -42,20 +42,20 @@ flowchart TB
         TABLES["전체 387개 테이블<br>+ 56개 예약쿼리"]
         SCHEMA_CHK["스키마 변경 감지<br>컬럼 추가/삭제/타입변경"]
         DEPENDENCY["의존성 체인 분석<br>연쇄 영향 범위"]
-        LEGACY["레거시 감지<br>amplitude 구버전, erp_new_v2"]
+        LEGACY["레거시 감지<br>analytics_legacy, erp_legacy (가칭)"]
     end
 
     subgraph EC2["5. EC2 Existing Inspectors"]
-        BILLING["billing_stack<br>00:30 PG↔BQ ID 비교"]
-        BIKE["bike_snapshot<br>23:30 누락+중복 감지 (자동복구)"]
-        DUP["bq_duplicated<br>22:00 8테이블 중복 제거 (자동복구)"]
-        PGBQ["pg_bq_comparison<br>23:00 시간별 건수 비교"]
-        AREA["area/geoblock<br>08~09시 지역 정합성"]
+        BILLING["billing_sync (가칭)<br>00:30 PG↔BQ ID 비교"]
+        BIKE["device_snapshot (가칭)<br>23:30 누락+중복 감지 (자동복구)"]
+        DUP["dedup_checker (가칭)<br>22:00 8테이블 중복 제거 (자동복구)"]
+        PGBQ["sync_validator (가칭)<br>23:00 시간별 건수 비교"]
+        AREA["area/geoblock (가칭)<br>08~09시 지역 정합성"]
     end
 
     subgraph Output["6. Slack Output"]
-        ALERT["#pmo_dt_데이터분석<br>data_main: 이슈 발견 시"]
-        REPORT["#pmo_dt_데이터분석<br>data_all: 매일 아침 리포트"]
+        ALERT["#data_ops (가칭)<br>data_main: 이슈 발견 시"]
+        REPORT["#data_ops (가칭)<br>data_all: 매일 아침 리포트"]
     end
 
     MAIN --> META & SQ & EC2S
