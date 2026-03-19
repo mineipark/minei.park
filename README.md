@@ -14,9 +14,9 @@
 
 ## 핵심 역량
 
-| ML 예측 모델링 | 데이터 기반 실험 설계 | 업무 자동화 파이프라인 |
+| 데이터 기반 기획 | 실험 & 분석 | AX (업무 자동화) |
 |:---:|:---:|:---:|
-| LightGBM 앙상블 모델로<br>일별 수요를 예측하고<br>MAPE 20%를 달성 | DiD, ROI 분석 등<br>실험 설계로 현장 작업의<br>효과를 정량적으로 검증 | 19개 자동화 도구를<br>설계·운영하며<br>6개 업무 영역을 커버 |
+| ML 수요 예측 모델로<br>재배치·인력 스케줄링<br>의사결정 근거 설계 | DiD·ROI 등 인과추론으로<br>현장 작업 효과를<br>정량적으로 검증 | 19개 자동화 도구와<br>6-Layer 파이프라인 감시로<br>수동 운영을 시스템화 |
 
 ---
 
@@ -28,9 +28,8 @@
 | 2 | [**현장 작업 ROI & DiD 실험**](./projects/experiment-did-roi/) | 현장 작업 효과를 ROI·DiD로 정량 검증 | DiD / ROI Analysis · BigQuery |
 | 3 | [**운영팀 Task 보드**](./projects/task-board/) | 5개 뷰 통합 프로젝트 매니지먼트 웹앱 | Firebase · Firestore · JS |
 | 4 | [**기술소견서 & 자산 리포트 자동화**](./projects/automation-report/) | 사고 접수→소견서 자동 생성, 월간 자산 리포트 | Slack Bot · Apps Script · BigQuery |
-| 5 | [**자동화 카탈로그**](./projects/automation-catalog/) | 19개 자동화 도구 체계적 관리 | Google Sheets · Process Mgmt |
-| 6 | [**운영 대시보드**](./projects/ops-dashboard/) | 7개 페이지 멀티페이지 운영 모니터링 | Streamlit · BigQuery · Folium |
-| 7 | [**Data 파이프라인 모니터링**](./projects/data-pipeline/) | 6-Layer 데이터 파이프라인 감시 시스템 | BigQuery · Slack Bot · EC2 |
+| 5 | [**운영 대시보드**](./projects/ops-dashboard/) | 7개 페이지 멀티페이지 운영 모니터링 | Streamlit · BigQuery · Folium |
+| 6 | [**Data 파이프라인 모니터링**](./projects/data-pipeline/) | 6-Layer 데이터 파이프라인 감시 시스템 | BigQuery · Slack Bot · EC2 |
 
 > 각 프로젝트를 클릭하면 **Problem → Approach → Architecture → Results** 상세 페이지로 이동합니다.
 
