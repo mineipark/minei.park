@@ -16,7 +16,7 @@
 
 | ML 예측 모델링 | 데이터 기반 실험 설계 | 업무 자동화 파이프라인 |
 |:---:|:---:|:---:|
-| LightGBM 앙상블 모델로<br>일별 수요를 예측하고<br>MAPE 11%를 달성 | DiD, ROI 분석 등<br>실험 설계로 현장 작업의<br>효과를 정량적으로 검증 | 19개 자동화 도구를<br>설계·운영하며<br>6개 업무 영역을 커버 |
+| LightGBM 앙상블 모델로<br>일별 수요를 예측하고<br>MAPE 20%를 달성 | DiD, ROI 분석 등<br>실험 설계로 현장 작업의<br>효과를 정량적으로 검증 | 19개 자동화 도구를<br>설계·운영하며<br>6개 업무 영역을 커버 |
 
 ---
 
@@ -24,7 +24,7 @@
 
 | # | 프로젝트 | 한줄 요약 | 핵심 기술 |
 |:-:|---------|----------|----------|
-| 1 | [**ML 기반 수요 예측 시스템**](./projects/demand-forecast/) | 2-Model Ensemble로 일별 수요 예측, MAPE 11% | LightGBM · BigQuery · GitHub Actions |
+| 1 | [**ML 기반 수요 예측 시스템**](./projects/demand-forecast/) | 2-Model Ensemble로 일별 수요 예측, MAPE 20% | LightGBM · BigQuery · GitHub Actions |
 | 2 | [**현장 작업 ROI & DiD 실험**](./projects/experiment-did-roi/) | 현장 작업 효과를 ROI·DiD로 정량 검증 | DiD / ROI Analysis · BigQuery |
 | 3 | [**운영팀 Task 보드**](./projects/task-board/) | 5개 뷰 통합 프로젝트 매니지먼트 웹앱 | Firebase · Firestore · JS |
 | 4 | [**기술소견서 & 자산 리포트 자동화**](./projects/automation-report/) | 사고 접수→소견서 자동 생성, 월간 자산 리포트 | Slack Bot · Apps Script · BigQuery |
