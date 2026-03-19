@@ -1,4 +1,4 @@
-# 박민이 | AI 기반 운영 기획 포트폴리오
+# 박민이 | 포트폴리오
 
 
 ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
