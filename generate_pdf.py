@@ -199,7 +199,7 @@ li {{ margin-bottom: 3px; }}
         <tr><td>4</td><td>기술소견서 & 자산 리포트</td><td>사고접수 자동화, 월간 자산 리포트</td><td>Slack Bot / Apps Script</td><td>수동 작업 완전 제거</td></tr>
         <tr><td>5</td><td>자동화 카탈로그</td><td>19개 자동화 도구 체계적 관리</td><td>Google Sheets</td><td>6개 영역, 비개발자 협업</td></tr>
         <tr><td>6</td><td>운영 대시보드</td><td>7페이지 멀티페이지 모니터링</td><td>Streamlit / Folium</td><td>RBAC, GPS 동선 시각화</td></tr>
-        <tr><td>7</td><td>Edwin 파이프라인 모니터링</td><td>6-Layer 데이터 파이프라인 감시 시스템</td><td>BigQuery / Slack Bot / EC2</td><td>387 테이블 자동 감시, 장애 즉시 감지</td></tr>
+        <tr><td>7</td><td>Data 파이프라인 모니터링</td><td>6-Layer 데이터 파이프라인 감시 시스템</td><td>BigQuery / Slack Bot / EC2</td><td>387 테이블 자동 감시, 장애 즉시 감지</td></tr>
     </tbody>
 </table>
 
@@ -436,10 +436,10 @@ li {{ margin-bottom: 3px; }}
     </div>
 </div>
 
-<!-- ===== Project 7: Edwin 파이프라인 모니터링 ===== -->
+<!-- ===== Project 7: Data 파이프라인 모니터링 ===== -->
 <div class="project-page">
     <div class="project-num">PROJECT 7</div>
-    <div class="project-title">Edwin 파이프라인 모니터링 시스템</div>
+    <div class="project-title">Data 파이프라인 모니터링 시스템</div>
     <div class="project-desc">387개 테이블, 56개 예약쿼리, EC2 Inspector를 6-Layer 구조로 자동 감시하는 데이터 파이프라인 모니터링 시스템</div>
 
     <h3>Problem</h3>
@@ -453,11 +453,11 @@ li {{ margin-bottom: 3px; }}
     <table>
         <thead><tr><th>Layer</th><th>구성</th><th>역할</th></tr></thead>
         <tbody>
-            <tr><td>Trigger Layer</td><td>edwin_main (2~3시간), edwin_all (매일 09:00), /edwin (온디맨드)</td><td>감시 주기 및 실행 트리거</td></tr>
+            <tr><td>Trigger Layer</td><td>data_main (2~3시간), data_all (매일 09:00), /data (온디맨드)</td><td>감시 주기 및 실행 트리거</td></tr>
             <tr><td>Scan Engine</td><td>scan_table_meta, scan_scheduled_queries, scan_ec2_cron, scan_views, scan_schemas</td><td>5개 스캔 모듈로 파이프라인 상태 점검</td></tr>
-            <tr><td>edwin_main Scope</td><td>Critical 노드 5개 + 핵심 예약쿼리 ~15개</td><td>긴급 감시 (tf_billing, business_riding 등)</td></tr>
-            <tr><td>edwin_all Scope</td><td>전체 387개 테이블 + 56개 예약쿼리</td><td>종합 점검 (스키마 변경, 의존성 체인, 레거시 감지)</td></tr>
-            <tr><td>EC2 Inspectors</td><td>billing_stack, bike_snapshot, bq_duplicated 등 5개</td><td>데이터 정합성 점검 (Edwin이 생존 감시)</td></tr>
+            <tr><td>data_main Scope</td><td>Critical 노드 5개 + 핵심 예약쿼리 ~15개</td><td>긴급 감시 (tf_billing, business_riding 등)</td></tr>
+            <tr><td>data_all Scope</td><td>전체 387개 테이블 + 56개 예약쿼리</td><td>종합 점검 (스키마 변경, 의존성 체인, 레거시 감지)</td></tr>
+            <tr><td>EC2 Inspectors</td><td>billing_stack, bike_snapshot, bq_duplicated 등 5개</td><td>데이터 정합성 점검 (Data이 생존 감시)</td></tr>
             <tr><td>Slack Output</td><td>#pmo_dt_데이터분석</td><td>이슈 시 즉시 알림 + 매일 아침 리포트</td></tr>
         </tbody>
     </table>
@@ -473,15 +473,15 @@ from google.cloud import bigquery_datatransfer_v1
 
     <h3>핵심 설계 원칙</h3>
     <div class="formula-box">
-        <span class="highlight">Edwin</span> = 파이프라인 인프라 감시 (돌아가고 있는가?)<br>
+        <span class="highlight">Data</span> = 파이프라인 인프라 감시 (돌아가고 있는가?)<br>
         <span class="highlight">Inspector</span> = 데이터 정합성 점검 (데이터가 맞는가?)<br>
-        <span class="highlight">Edwin → Inspector</span> = Inspector 생존 감시 (Inspector가 살아있는가?)
+        <span class="highlight">Data → Inspector</span> = Inspector 생존 감시 (Inspector가 살아있는가?)
     </div>
 
     <h3>Results</h3>
     <ul>
         <li><strong>387개 테이블 + 56개 예약쿼리</strong> 자동 감시 체계 구축</li>
-        <li>edwin_main: 2~3시간 주기로 <strong>Critical 노드 장애 즉시 감지</strong></li>
+        <li>data_main: 2~3시간 주기로 <strong>Critical 노드 장애 즉시 감지</strong></li>
         <li>EC2 Inspector 생존 감시 → Inspector 장애 시 <strong>자동 알림</strong></li>
         <li>스키마 변경 감지 + 의존성 체인 분석 → <strong>연쇄 장애 사전 차단</strong></li>
     </ul>
@@ -508,7 +508,7 @@ from google.cloud import bigquery_datatransfer_v1
         <tr><td>접근성 개선</td><td>수요 예측 → 재배치 최적화</td><td>앱 오픈 시 100m 내 바이크 확률 증가</td></tr>
         <tr><td>전환율 개선</td><td>ROI 분석 → 품질 우선순위화</td><td>접근 가능 사용자의 실제 라이딩 비율 증가</td></tr>
         <tr><td>비용 절감</td><td>동선 최적화, 자동화</td><td>현장 작업 효율 향상, 수동 작업 제거</td></tr>
-        <tr><td>데이터 신뢰도</td><td>Edwin 파이프라인 모니터링</td><td>장애 즉시 감지, 데이터 기반 의사결정 안정성 확보</td></tr>
+        <tr><td>데이터 신뢰도</td><td>Data 파이프라인 모니터링</td><td>장애 즉시 감지, 데이터 기반 의사결정 안정성 확보</td></tr>
     </tbody>
 </table>
 
@@ -525,11 +525,11 @@ CS 사고 접수   ──────────→ 기술소견서 자동화
 월간 자산 리포트     ──→ Slack 봇
                                            Streamlit 대시보드
 [파이프라인 감시]                             Task 보드 (Firebase)
-Edwin ──→ 387 테이블 + 56 예약쿼리 감시
+Data ──→ 387 테이블 + 56 예약쿼리 감시
       ──→ EC2 Inspector 생존 감시 ──→ Slack 장애 알림
 
 [인프라]
-GitHub Actions (매일 09:00 / 매월 1일 / Edwin 2~3시간)</div>
+GitHub Actions (매일 09:00 / 매월 1일 / Data 2~3시간)</div>
 
 <p class="footer-text" style="margin-top: 30px;">본 포트폴리오는 실제 운영 환경에서 설계/구축한 시스템을 기반으로 합니다.<br>회사 고유 데이터, 인증 정보, 식별 가능한 정보는 모두 제거 또는 일반화되었습니다.</p>
 <p class="footer-link">GitHub: github.com/mineipark/minei.park</p>

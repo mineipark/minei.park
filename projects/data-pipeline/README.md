@@ -1,4 +1,4 @@
-# PROJECT 7. Edwin 파이프라인 모니터링 시스템
+# PROJECT 7. Data 파이프라인 모니터링 시스템
 
 > 387개 테이블, 56개 예약쿼리, EC2 Inspector를 6-Layer 구조로 자동 감시하는 데이터 파이프라인 모니터링 시스템
 
@@ -18,9 +18,9 @@
 ```mermaid
 flowchart TB
     subgraph Trigger["1. Trigger Layer"]
-        MAIN["edwin_main<br>2~3시간 주기"]
-        ALL["edwin_all<br>매일 09:00"]
-        MANUAL["/edwin<br>온디맨드"]
+        MAIN["data_main<br>2~3시간 주기"]
+        ALL["data_all<br>매일 09:00"]
+        MANUAL["/data<br>온디맨드"]
     end
 
     subgraph Scan["2. Scan Engine — scan_pipeline.py"]
@@ -31,14 +31,14 @@ flowchart TB
         SCHEMA["scan_schemas<br>스키마 변경 감지"]
     end
 
-    subgraph Main["3. edwin_main Scope — 긴급 감시"]
+    subgraph Main["3. data_main Scope — 긴급 감시"]
         CRITICAL["Critical 노드 5개<br>tf_billing, business_riding<br>tf_purchase_table, billing_stack<br>tf_bike_snapshot"]
         QUERIES["핵심 예약쿼리 ~15개<br>매시간: business_riding, tf_riding<br>매일: daily_bike, daily_sales_raw"]
         SYNC["원천 동기화<br>riding, billing<br>bike_snapshot, maintenance"]
         HEALTH["Inspector 헬스<br>EC2 cron 정상 실행 확인"]
     end
 
-    subgraph AllScope["4. edwin_all Additional Scope — 종합 점검"]
+    subgraph AllScope["4. data_all Additional Scope — 종합 점검"]
         TABLES["전체 387개 테이블<br>+ 56개 예약쿼리"]
         SCHEMA_CHK["스키마 변경 감지<br>컬럼 추가/삭제/타입변경"]
         DEPENDENCY["의존성 체인 분석<br>연쇄 영향 범위"]
@@ -54,8 +54,8 @@ flowchart TB
     end
 
     subgraph Output["6. Slack Output"]
-        ALERT["#pmo_dt_데이터분석<br>edwin_main: 이슈 발견 시"]
-        REPORT["#pmo_dt_데이터분석<br>edwin_all: 매일 아침 리포트"]
+        ALERT["#pmo_dt_데이터분석<br>data_main: 이슈 발견 시"]
+        REPORT["#pmo_dt_데이터분석<br>data_all: 매일 아침 리포트"]
     end
 
     MAIN --> META & SQ & EC2S
@@ -75,13 +75,13 @@ flowchart TB
 
 | 역할 | 시스템 | 책임 |
 |------|--------|------|
-| **인프라 감시** | Edwin | 돌아가고 있는가? |
+| **인프라 감시** | Data | 돌아가고 있는가? |
 | **데이터 정합성** | Inspector | 데이터가 맞는가? |
-| **메타 감시** | Edwin → Inspector | Inspector가 살아있는가? |
+| **메타 감시** | Data → Inspector | Inspector가 살아있는가? |
 
 ### Scan Engine 모듈별 커버리지
 
-| 모듈 | 역할 | edwin_main | edwin_all |
+| 모듈 | 역할 | data_main | data_all |
 |------|------|:---:|:---:|
 | scan_table_meta | 테이블 freshness, row 수 변동 | O | O |
 | scan_scheduled_queries | 예약쿼리 실행 성공/실패 | O | O |
@@ -178,7 +178,7 @@ def scan_views(dataset: str) -> list[dict]:
 ## Results
 
 - **387개 테이블 + 56개 예약쿼리** 자동 감시 체계 구축
-- edwin_main: 2~3시간 주기로 **Critical 노드 장애 즉시 감지**
+- data_main: 2~3시간 주기로 **Critical 노드 장애 즉시 감지**
 - EC2 Inspector 생존 감시 → Inspector 장애 시 **자동 알림**
 - 스키마 변경 감지 + 의존성 체인 분석 → **연쇄 장애 사전 차단**
 - 장애 원인 추적 시간 대폭 단축 → 데이터 신뢰도 향상
@@ -189,7 +189,7 @@ def scan_views(dataset: str) -> list[dict]:
 
 | 이상 감지 알림 | 장애 해결 완료 | 일일 점검 리포트 |
 |:---:|:---:|:---:|
-| ![이상 감지](../../assets/edwin_alert.jpeg) | ![해결 완료](../../assets/edwin_resolved.jpeg) | ![일일 점검](../../assets/edwin_daily_report.jpeg) |
+| ![이상 감지](../../assets/data_alert.jpeg) | ![해결 완료](../../assets/data_resolved.jpeg) | ![일일 점검](../../assets/data_daily_report.jpeg) |
 | GeoJSON 에러 감지<br>비활성 상태 확인 | 깨진 폴리곤 수정<br>예약쿼리 자동 복구 | Critical 노드 5/5 정상<br>우선 조치 목록 제공 |
 
 ---

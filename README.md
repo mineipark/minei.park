@@ -31,7 +31,7 @@
 | 4 | [**기술소견서 & 자산 리포트 자동화**](./projects/automation-report/) | 사고 접수→소견서 자동 생성, 월간 자산 리포트 | Slack Bot · Apps Script · BigQuery |
 | 5 | [**자동화 카탈로그**](./projects/automation-catalog/) | 19개 자동화 도구 체계적 관리 | Google Sheets · Process Mgmt |
 | 6 | [**운영 대시보드**](./projects/ops-dashboard/) | 7개 페이지 멀티페이지 운영 모니터링 | Streamlit · BigQuery · Folium |
-| 7 | [**Edwin 파이프라인 모니터링**](./projects/edwin-pipeline/) | 6-Layer 데이터 파이프라인 감시 시스템 | BigQuery · Slack Bot · EC2 |
+| 7 | [**Data 파이프라인 모니터링**](./projects/data-pipeline/) | 6-Layer 데이터 파이프라인 감시 시스템 | BigQuery · Slack Bot · EC2 |
 
 > 각 프로젝트를 클릭하면 **Problem → Approach → Architecture → Results** 상세 페이지로 이동합니다.
 
@@ -72,7 +72,7 @@ flowchart TB
     end
 
     subgraph 파이프라인 감시
-        EDWIN["Edwin<br>파이프라인 모니터링"]
+        DATA["Data<br>파이프라인 모니터링"]
         EC2_INS["EC2 Inspectors<br>데이터 정합성"]
     end
 
@@ -94,12 +94,12 @@ flowchart TB
     ASSET --> SLACK
 
     BQ --> DASH
-    BQ --> EDWIN
-    EDWIN -->|감시| EC2_INS
-    EDWIN -->|장애 알림| SLACK
+    BQ --> DATA
+    DATA -->|감시| EC2_INS
+    DATA -->|장애 알림| SLACK
     GA -.->|매일 09:00| PIPELINE
     GA -.->|매월 1일| ASSET
-    GA -.->|2~3시간| EDWIN
+    GA -.->|2~3시간| DATA
 ```
 
 ---
@@ -117,7 +117,7 @@ EBITDA = 매출 - 비용
 | **접근성 개선** | 수요 예측 → 재배치 최적화 | 앱 오픈 시 100m 내 바이크 확률 증가 |
 | **전환율 개선** | ROI 분석 → 품질 우선순위화 | 접근 가능 사용자의 실제 라이딩 비율 증가 |
 | **비용 절감** | 동선 최적화, 자동화 | 현장 작업 효율 향상, 수동 작업 제거 |
-| **데이터 신뢰도** | Edwin 파이프라인 모니터링 | 장애 즉시 감지, 데이터 기반 의사결정 안정성 확보 |
+| **데이터 신뢰도** | Data 파이프라인 모니터링 | 장애 즉시 감지, 데이터 기반 의사결정 안정성 확보 |
 
 ---
 
