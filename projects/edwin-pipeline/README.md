@@ -185,4 +185,13 @@ def scan_views(dataset: str) -> list[dict]:
 
 ---
 
+## Screenshots
+
+| 이상 감지 알림 | 장애 해결 완료 | 일일 점검 리포트 |
+|:---:|:---:|:---:|
+| ![이상 감지](../../assets/edwin_alert.jpeg) | ![해결 완료](../../assets/edwin_resolved.jpeg) | ![일일 점검](../../assets/edwin_daily_report.jpeg) |
+| GeoJSON 에러 감지<br>비활성 상태 확인 | 깨진 폴리곤 수정<br>예약쿼리 자동 복구 | Critical 노드 5/5 정상<br>우선 조치 목록 제공 |
+
+---
+
 `BigQuery` `bigquery_datatransfer` `Python` `Slack Bot` `EC2` `Pipeline Monitoring` `GitHub Actions`
